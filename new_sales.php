@@ -25,25 +25,30 @@
 
  
 		if (!$conn) { 
-			echo "<p>Database connection failure</p>"; 
-		} else { 
+			echo "<p>Database connection failure</p>";
+		}else 
+		{ 
 		//check if it was succesful
 			$query = "select * FROM Sales;"; 
 			$result = mysqli_query($conn, $query); 
-			if(!$result) { 
+			if(!$result) 
+			{ 
 				echo "<p>Something is wrong with ", $query, "</p>";
-			} else {
-			
-			$itemid = $_POST["ItemID"];
-			$query = "select ITEM_NAME from ITEMS where ITEM_ID = $itemid";
-			$result = mysqli_query($conn, $query); 
-			
-			if(!$result){
-				echo "<p> unable to find Item in database, please try again </p>";
-			}else{
-			echo "<p><label for='Item Name'>Item Name: </label>
-			<input type='text' name='Name' id='Name' size='25' maxlength='25' placeholder = '$result' readonly='readonly' /></p>";
+			} else 
+			{
+				$itemid = $_POST["ItemID"];
+				$query = "select ITEM_NAME from ITEMS where ITEM_ID = " + $itemid;
+				$result = mysqli_query($conn, $query); 
+				if(!$result)
+				{
+					echo "<p> unable to find Item in database, please try again </p>";
+				}else
+				{
+					echo "<p><label for='Item Name'>Item Name: </label>
+					<input type='text' name='Name' id='Name' size='25' maxlength='25' placeholder = '$result' readonly='readonly' /></p>";
+				}
 			}
+		}
 	?>
 				
 	<p><label for="Price">Price: </label>
@@ -91,8 +96,14 @@
 			$amount = $_POST["Amount"];
 			$soldby = $_POST["Employee"];
 			
-			$query = "insert into Sales(ITEM_ID, QTY, PRICE, SOLD_BY) values ($itemid, $amount, $price, $soldby)";
-			
+			$query = "insert into Sales(ITEM_ID, QTY, PRICE, SOLD_BY) values ('$itemid', '$amount', '$price', '$soldby')";
+			$result = mysqli_query($conn, $query);
+			if(!$result){
+				echo "<p>Something is wrong with ", $query,"</p>";
+			}
+		}
+		}
+						
 	?>
 	
 </body>
