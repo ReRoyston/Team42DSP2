@@ -1,0 +1,26 @@
+
+
+SQL for Database creation and insertion
+
+
+DROP TABLE SALELIST;
+DROP TABLE PRODUCTS;
+
+Create Table PRODUCTS(
+prodid int NOT NULL AUTO_INCREMENT,
+prodname	varchar(50),
+prodtype	varchar(30),
+saleprice		decimal(3,2),
+supplierprice	decimal(3,2),
+PRIMARY KEY		(prodid)
+);
+
+Create Table SALELIST(
+saleid		int		NOT NULL 	AUTO_INCREMENT,
+prodid		int		NOT NULL,
+datesold	varchar(15),
+amountsold	int,
+Primary Key		(saleid),
+Foreign Key		(prodid)								REFERENCES PRODUCTS(prodid)
+);
+

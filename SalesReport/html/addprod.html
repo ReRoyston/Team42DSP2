@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/general.css">
+	</head>
+	<title>Sales report system</title>
+	<header>
+		<h1>Sales report system</h1>
+	<header/>
+	<body>
+		<nav>
+		  <li><a href="home.html">Home</a></li>
+		  <li><a class="active" href="addprod.html">Add product</a></li>
+		  <li><a href="addsale.html">New sale</a></li>
+		  <li><a href="view.html">View sales</a></li>
+		  <li><a href="reports.html">Reports</a></li>
+		</nav>
+		<div>
+			<h2>
+				Add a new product to the product list
+			</h2>
+		<section/>
+		<div class = "main">
+			<p>
+				<form action="../php/add_product.php" method="post">
+				Product name: <input type="text" name="prodname" size="40">
+				<br/>
+				Product type: <input type="text" name="prodtype">
+				<br/>
+				Sale price: $<input type="text" name="saleprice" maxlength="6" size="3">
+				<br/>
+				Supplier price: $<input type="text" name="supplierprice" maxlength="6" size="3">
+				<br/>
+				<input type="submit" value="Add">
+
+				</form>
+			</p>
+		<div/>
+	</body>
+</html>
