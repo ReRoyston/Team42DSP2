@@ -18,8 +18,8 @@ $SupplierPrice = $_POST['supplierprice'];
 
 
 //$sql = "insert into products (Name,Email) values ('$Name','$Email')";
-$sql = "insert into products (prodname,prodtype,saleprice,supplierprice) 
-values ('$ProdName','$ProdType','$SalePrice','$SupplierPrice')";
+$sql = "insert into products (prod_name, prod_type, sale_price, supplier_price) 
+values ('$ProdName', '$ProdType', '$SalePrice', '$SupplierPrice')";
 
 
 if (!mysqli_query($con,$sql))

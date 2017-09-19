@@ -7,20 +7,21 @@ DROP TABLE SALELIST;
 DROP TABLE PRODUCTS;
 
 Create Table PRODUCTS(
-prodid int NOT NULL AUTO_INCREMENT,
-prodname	varchar(50),
-prodtype	varchar(30),
-saleprice		decimal(3,2),
-supplierprice	decimal(3,2),
-PRIMARY KEY		(prodid)
+prod_id int NOT NULL AUTO_INCREMENT,
+prod_name	varchar(50),
+prod_type	varchar(30),
+sale_price		decimal(3,2),
+supplier_price	decimal(3,2),
+PRIMARY KEY		(prod_id)
 );
 
 Create Table SALELIST(
-saleid		int		NOT NULL 	AUTO_INCREMENT,
-prodid		int		NOT NULL,
-datesold	varchar(15),
-amountsold	int,
-Primary Key		(saleid),
-Foreign Key		(prodid)								REFERENCES PRODUCTS(prodid)
+sale_id		int		NOT NULL 	AUTO_INCREMENT,
+prod_id		int		NOT NULL,
+date_sold	varchar(15),
+amount_sold	int,
+sold_by		varchar(20),
+Primary Key		(sale_id),
+Foreign Key		(prod_id)								REFERENCES PRODUCTS(prod_id)
 );
 
