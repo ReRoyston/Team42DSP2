@@ -10,8 +10,8 @@ Create Table PRODUCTS(
 prod_id int NOT NULL AUTO_INCREMENT,
 prod_name	varchar(50),
 prod_type	varchar(30),
-sale_price		decimal(3,2),
-supplier_price	decimal(3,2),
+sale_price		decimal(5,2),
+supplier_price	decimal(5,2),
 PRIMARY KEY		(prod_id)
 );
 
@@ -24,4 +24,9 @@ sold_by		varchar(20),
 Primary Key		(sale_id),
 Foreign Key		(prod_id)								REFERENCES PRODUCTS(prod_id)
 );
+
+INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price)
+VALUES('Sundown Naturals Vitamin C 300ml', 'Vitamin', '9.70', '4.60');
+INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price)
+VALUES('Sundown Naturals Vitamin D 300ml', 'Vitamin', '15.42', '9.80');
 

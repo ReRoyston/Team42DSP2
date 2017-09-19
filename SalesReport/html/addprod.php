@@ -10,7 +10,7 @@
 	<body>
 		<nav>
 		  <li><a href="home.html">Home</a></li>
-		  <li><a class="active" href="addprod.html">Add product</a></li>
+		  <li><a class="active" href="addprod.php">Add product</a></li>
 		  <li><a href="addsale.html">New sale</a></li>
 		  <li><a href="view.html">View sales</a></li>
 		  <li><a href="reports.html">Reports</a></li>
@@ -36,7 +36,7 @@
 				</form>
 			</p>
 			
-			<table>
+			<table border="1">
                 <tr>
                     <th>Product ID</th>
                     <th>Product Name</th>
@@ -44,24 +44,19 @@
                     <th>Sale price</th>
 					<th>Supplier price</th>
                 </tr>
-
-      <!-- populate table from mysql database -->
-                <?php
+				
+				<?php
 				$con = mysqli_connect('127.0.0.1','root','');
 				if(!$con)
 				{
 					echo 'Not Connected To Server';
-				}
-				else
-				{
-					echo 'connected';
 				}
 				if (!mysqli_select_db ($con,'sales'))
 				{
 					echo 'Database Not Selected';
 				}
 
-				$sql = "SELECT * FROM 'products'";
+				$sql = "SELECT * FROM `products`";
 
 				if (!mysqli_query($con, $sql))
 				{
@@ -71,15 +66,21 @@
 				{
 					$result = mysqli_query($con, $sql);
 				}
-				
-				while($row = mysqli_fetch_array($result)){
-					echo "<tr><td>".$row['prod_id']."</td>"
-					."<td>".$row['prod_name']."</td>"
-					."<td>".$row['prod_type']."</td>"
-					."<td>".$row['sale_price']."</td>"
-					."<td>".$row['supplier_price']."</td></tr>";
-					
 				?>
+				<?php while($row = mysqli_fetch_array($result)):?>
+					<tr>
+						<td><?php echo $row['prod_id'];?></td>
+						<td><?php echo $row['prod_name'];?></td>
+						<td><?php echo $row['prod_type'];?></td>
+						<td><?php echo $row['sale_price'];?></td>
+						<td><?php echo $row['supplier_price'];?></td>
+					</tr>
+					
+				<?php endwhile;?>
+				
+				
+
+      
             </table>
 		<div/>
 	</body>
