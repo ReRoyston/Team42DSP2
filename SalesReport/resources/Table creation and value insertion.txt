@@ -29,4 +29,29 @@ INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price)
 VALUES('Sundown Naturals Vitamin C 300ml', 'Vitamin', '9.70', '4.60');
 INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price)
 VALUES('Sundown Naturals Vitamin D 300ml', 'Vitamin', '15.42', '9.80');
+INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price)
+VALUES('Colgate 100ml Mint', 'Toothepaste', '6.50', '4.00');
 
+INSERT INTO SALELIST(prod_id, date_sold, amount_sold, sold_by)
+VALUES('1', '20/09/2017', '2', 'Kelly');
+INSERT INTO SALELIST(prod_id, date_sold, amount_sold, sold_by)
+VALUES('3', '21/09/2017', '3', 'Kelly');
+INSERT INTO SALELIST(prod_id, date_sold, amount_sold, sold_by)
+VALUES('2', '20/09/2017', '1', 'Sarah');
+
+
+
+
+Queries for data output on web pages
+
+--To order sales by most recent date
+SELECT * FROM `salelist` ORDER BY date_sold DESC
+
+--To join the two tables using a right join and display information
+--from both
+SELECT salelist.sale_id, products.prod_id, products.prod_name, salelist.date_sold, salelist.sold_by, salelist.amount_sold, 
+(salelist.amount_sold * (products.sale_price - products.supplier_price)) AS profit
+FROM salelist
+RIGHT JOIN products
+ON salelist.prod_id = products.prod_id
+ORDER BY salelist.date_sold;

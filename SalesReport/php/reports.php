@@ -9,11 +9,11 @@
 	<header/>
 	<body>
 		<nav>
-		  <li><a href="home.html">Home</a></li>
+		  <li><a href="../html/home.html">Home</a></li>
 		  <li><a href="addprod.php">Add product</a></li>
-		  <li><a href="addsale.html">New sale</a></li>
-		  <li><a href="view.html">View sales</a></li>
-		  <li><a class="active" href="reports.html">Reports</a></li>
+		  <li><a href="addsale.php">New sale</a></li>
+		  <li><a href="view.php">View sales</a></li>
+		  <li><a class="active" href="reports.php">Reports</a></li>
 		</nav>
 		<div>
 			<h2>
