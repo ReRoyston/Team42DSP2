@@ -3,7 +3,7 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
-	<title>Sales report system</title>
+	<title>View reports</title>
 	<header>
 		<h1>Sales report system</h1>
 	<header/>
@@ -22,13 +22,17 @@
 		<section/>
 		<div class = "main">
 			<p>
-			<input type="radio" name="gender" value="thisweek" checked = "checked"> This week
-				<input type="radio" name="gender" class="secondrow" 
-				value="lastweek"> Last week<br>
-				
-				<input type="radio" name="gender" value="thismonth"> This month
-				<input type="radio" name="gender" class="secondrow"
-				value="lastmonth"> Last month
+				<table>
+					<tr>
+						<td class="radiotable"><input type="radio" name="gender" value="thisweek" checked = "checked"> This week</td>
+						<td class="radiotable"><input type="radio" class="radiotable" name="gender" value="lastweek"> Last week</td>
+					</tr>
+					
+					<tr>
+						<td class="radiotable"><input type="radio" name="gender" value="thismonth"> This month</td>
+						<td class="radiotable"><input type="radio" name="gender" value="lastmonth"> Last month</td>
+					</tr>
+				<table>
 			</p>
 		
 			

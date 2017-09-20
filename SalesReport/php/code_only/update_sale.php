@@ -6,6 +6,11 @@
 <html>
 	<body>
 		<?php
+		//sessions variable are global variables that are accessable over multiple
+		//pages.
+		session_start();
+		//Retrieve the sale ID from our session to use in the SQL statement.
+		$SaleID = $_SESSION["SaleIdToUpdate"];
 		//Creates a connection to the local host (127.0.0.1) and root 
 		//which is the default username and password which defaults to nothing
 		$con = mysqli_connect('127.0.0.1','root','');
@@ -19,29 +24,29 @@
 		{
 		 echo 'Database Not Selected';
 		}
-		//Get the users values entered on the web page for the following fields
+		//Get the values entered on the web page for the following fields
 		$ProdID = $_POST['prodid'];
 		$DateSold = $_POST['datesold'];
 		$AmountSold = $_POST['amountsold'];
 		$SoldBy = $_POST['soldby'];
-		//Takes the user input values and adds them to our DB using an INSERT statement
-		$sql = "INSERT INTO SALELIST (prod_id, date_sold, amount_sold, sold_by) 
-		values ('$ProdID', '$DateSold', '$AmountSold', '$SoldBy')";
+		//Takes the user input values and changes them in our DB using an UPDATE statement
+		$sql = "UPDATE SALELIST 
+		SET prod_id = '$ProdID', date_sold = '$DateSold', 
+		amount_sold = '$AmountSold', sold_by = '$SoldBy'
+		WHERE sale_id = '$SaleID'";
 		//If our query isn't successful then display a message
 		if (!mysqli_query($con,$sql))
 		{
-		 echo 'Not added';
+		 echo 'Not updated';
 		}
-		//If it is successful it will navigate back to the add sale page
-		//in 8 seconds.
+		//If it is successful it will navigate to this php page and show this message
+		//then after 10 seconds, it will take the user back to the view sales page.
 		else
 		{
-			 echo 'New sale added to database successfully
-			 <br>You will be redirected to the new sale page again
-			 <br>In 8 seconds.';
+			 echo 'Sale was successfully updated.
+			 <br>You will be redirected to the view sales page again
+			 <br>In 10 seconds.';
 		}
-		header("refresh:8; url=../addsale.php");
-
 		?>﻿
 		
 		<table border = "1">
@@ -50,28 +55,13 @@
 						<th>Sale ID</th>
 						<th>Product ID</th>
 						<th>Date of sale</th>
-						<th>Sold by</th>
 						<th>Amount sold</th>
-						
-						
+						<th>Sold by</th>
 					</tr>
 					<?php
-					//Creates a connection to the local host (127.0.0.1) and root 
-					//which is the default username and password which defaults to nothing
-					$con = mysqli_connect('127.0.0.1','root','');
-					//If the connection isn't successful display a message
-					if(!$con)
-					{
-						echo 'Not Connected To Server';
-					}
-					//If the connection to our sales DB isn't successful display a message
-					if (!mysqli_select_db ($con,'sales'))
-					{
-						echo 'Database Not Selected';
-					}
+					
 					//SQL query to get all product entries from 'products' table
-					$sql = "SELECT * FROM salelist
-					ORDER BY sale_id DESC";
+					$sql = "SELECT * FROM salelist WHERE sale_id = '$SaleID'";
 					//If our query isn't successful then display a message
 					if (!mysqli_query($con, $sql))
 					{
@@ -97,7 +87,8 @@
 					
 				<?php endwhile;?>    
 				</table>
-
-
+				<?php
+					header("refresh:10; url=../view.php");
+				?>
 	</body>
 </html>

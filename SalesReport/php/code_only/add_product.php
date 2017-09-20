@@ -14,12 +14,13 @@ if (!mysqli_select_db ($con,'sales'))
 {
  echo 'Database Not Selected';
 }
-//Get the users values entered on the web page for the following fields
+//Get the values entered on the web page for the following fields
 $ProdName = $_POST['prodname'];
 $ProdType = $_POST['prodtype'];
 $SalePrice = $_POST['saleprice'];
 $SupplierPrice = $_POST['supplierprice'];
-//Takes the user input values and adds them to our DB using an INSERT statement
+//Takes user's inputs and adds them to the products table in
+//our DB using an INSERT statement
 $sql = "INSERT INTO PRODUCTS (prod_name, prod_type, sale_price, supplier_price) 
 values ('$ProdName', '$ProdType', '$SalePrice', '$SupplierPrice')";
 //If our query isn't successful then display a message
@@ -28,11 +29,11 @@ if (!mysqli_query($con,$sql))
  echo 'Not Inserted';
 }
 //If it is successful it will navigate to this php page and show this message
-//then after 4 seconds, return to the add product web page.
+//then after 7 seconds, return to the add product web page.
 else
 {
  echo 'New product added to database successfully';
 }
-header("refresh:4; url=../addprod.php");
+header("refresh:7; url=../addprod.php");
 
 ?>﻿

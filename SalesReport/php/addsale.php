@@ -3,7 +3,7 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
-	<title>Sales report system</title>
+	<title>Add sale</title>
 	<header>
 		<h1>Sales report system</h1>
 	<header/>
@@ -23,28 +23,34 @@
 		<div class = "main">
 			<p>
 				<form action="code_only/add_sale.php" method="post">
-				<p>
-				Product ID: <input type="text" name="prodid" maxlength="4" size="2">
-				</p>
-				Date sold: <input type="text" name="datesold" maxlength="10" size="6">
-				<p>
-				Amount sold: <input type="text" name="amountsold" maxlength="6" size="3">
-				</p>
-				Sold by: <input type="text" name="soldby" maxlength="20" size="17">
-				<p>
-				<input type="submit" value="Add sale">
-				</p>
+					<table>
+						<tr>
+							<td>Product ID:</td><td class="inputfield"> <input type="text" name="prodid" maxlength="4" size="2"></td>
+						</tr>
+						<tr>
+							<td>Date sold:</td><td class="inputfield"> <input type="text" name="datesold" maxlength="10" size="6"></td>
+						</tr>
+						<tr>
+							<td>Amount sold:</td><td class="inputfield"> <input type="text" name="amountsold" maxlength="6" size="3"></td>
+						</tr>
+						<tr>
+							<td>Sold by:</td><td class="inputfield"> <input type="text" name="soldby" maxlength="15" size="12"></td>
+						</tr>
+					</table>
+					<p>
+						<input type="submit" value="Add sale">
+					</p>
 				</form>
 			</p>
 			<p>
-				<font color="green">Use the product list below to make sure you have the correct ID otherwise
-				you won't be able to add it to the Database.</font>
+				Use the product list below to make sure you have the <font color="1F8FFF"><b>correct ID</b></font> otherwise
+				you won't be able to add it to the Database.
 			</p>
 			<p>
 			<table border="1" align="center">
 				<caption><h3>Product list</h3></caption>
                 <tr>
-                    <th>Product ID</th>
+                    <th><font color="1F8FFF">Product ID<font></th>
                     <th>Product Name</th>
                     <th>Product Type</th>
                 </tr>
@@ -63,7 +69,7 @@
 				{
 					echo 'Database Not Selected';
 				}
-				//SQL query to get all product entries from 'products' table
+				//SQL query to get relevant product fields from 'products' table
 				$sql = "SELECT prod_id, prod_name, prod_type FROM products;";
 				//If our query isn't successful then display a message
 				if (!mysqli_query($con, $sql))
@@ -81,7 +87,7 @@
 				?>
 				<?php while($row = mysqli_fetch_array($result)):?>
 					<tr>
-						<td><?php echo $row['prod_id'];?></td>
+						<td><font color="1F8FFF"><b><?php echo $row['prod_id'];?></b></font></td>
 						<td><?php echo $row['prod_name'];?></td>
 						<td><?php echo $row['prod_type'];?></td>
 					</tr>

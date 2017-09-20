@@ -3,7 +3,7 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
-	<title>Sales report system</title>
+	<title>Add new product</title>
 	<header>
 		<h1>Sales report system</h1>
 	<header/>
@@ -22,22 +22,26 @@
 		<section/>
 		<div class = "main">
 			<p>
+			
 				<form action="code_only/add_product.php" method="post">
-				<p>
-				Product name: <input type="text" name="prodname" size="40">
-				</p>
-				Product type: <input type="text" name="prodtype">
-				<p>
-				Sale price: $<input type="text" name="saleprice" maxlength="6" size="3">
-				</p>
-				Supplier price: $<input type="text" name="supplierprice" maxlength="6" size="3">
+				<table>
+				
+				<tr><td>Product name:</td><td class="inputfield"> <input type="text" name="prodname" size="40"></td></tr>
+				
+				<tr><td>Product type:</td><td class="inputfield">  <input type="text" name="prodtype"></td></tr>
+				
+				<tr><td>Sale price: $</td><td class="inputfield"><input type="text" name="saleprice" maxlength="6" size="3"></td></tr>
+				
+				<tr><td>Supplier price: $</td><td class="inputfield"><input type="text" name="supplierprice" maxlength="6" size="3"></td></tr>
+				</table>
 				<p>
 				<input type="submit" value="Add product">
 				</p>
 				</form>
+				
 			</p>
 			<p>
-			<table border="1">
+			<table border="1" align="center">
 				<caption><h3>Product list</h3></caption>
                 <tr>
                     <th>Product ID</th>
