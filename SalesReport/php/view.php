@@ -27,10 +27,10 @@
 				<table border = "1">
 				<caption><h3>Sales list</h3></caption>
 					<tr>
+						<th>Date of sale</th>
 						<th>Sale ID</th>
 						<th>Product ID</th>
 						<th>Product Name</th>
-						<th>Date of sale</th>
 						<th>Sold by</th>
 						<th>Amount sold</th>
 						<th>Profit</th>
@@ -52,12 +52,12 @@
 						echo 'Database Not Selected';
 					}
 					//SQL query to get all product entries from 'products' table
-					$sql = "SELECT salelist.sale_id, products.prod_id, products.prod_name, salelist.date_sold, salelist.sold_by, salelist.amount_sold, 
+					$sql = "SELECT salelist.date_sold, salelist.sale_id, products.prod_id, products.prod_name,  salelist.sold_by, salelist.amount_sold, 
 					(salelist.amount_sold * (products.sale_price - products.supplier_price)) AS profit
 					FROM salelist
 					RIGHT JOIN products
 					ON salelist.prod_id = products.prod_id
-					ORDER BY salelist.date_sold;";
+					ORDER BY salelist.date_sold DESC;";
 					//If our query isn't successful then display a message
 					if (!mysqli_query($con, $sql))
 					{
@@ -74,10 +74,10 @@
 					?>
 					<?php while($row = mysqli_fetch_array($result)):?>
 					<tr>
+						<td><?php echo $row['date_sold'];?></td>
 						<td><?php echo $row['sale_id'];?></td>
 						<td><?php echo $row['prod_id'];?></td>
 						<td><?php echo $row['prod_name'];?></td>
-						<td><?php echo $row['date_sold'];?></td>
 						<td><?php echo $row['sold_by'];?></td>
 						<td><?php echo $row['amount_sold'];?></td>
 						<td><?php echo $row['profit'];?></td>

@@ -47,6 +47,9 @@ Queries for data output on web pages
 --To order sales by most recent date
 SELECT * FROM `salelist` ORDER BY date_sold DESC
 
+--Product data necessary for new sale_id
+SELECT prod_id, prod_name, prod_type FROM products;
+
 --To join the two tables using a right join and display information
 --from both
 SELECT salelist.sale_id, products.prod_id, products.prod_name, salelist.date_sold, salelist.sold_by, salelist.amount_sold, 

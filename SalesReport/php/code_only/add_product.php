@@ -33,6 +33,6 @@ else
 {
  echo 'New product added to database successfully';
 }
-header("refresh:4; url=../html/addprod.php");
+header("refresh:4; url=../addprod.php");
 
 ?>﻿

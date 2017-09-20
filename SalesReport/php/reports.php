@@ -31,25 +31,7 @@
 				value="lastmonth"> Last month
 			</p>
 		
-			<table border = "1">
-					<tr>
-						<th>Profit rank</th>
-						<th>Product name</th>
-						<th>Units sold</th>
-						<th>Sale price</th>
-						<th>Supplier cost</th>
-						<th>Total profit</th>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Vitamin C</td>
-						<td>122</td>
-						<td>$8</td>
-						<td>$2.50</td>
-						<td>$671</td>
-					</tr>
-				</table>
-				<br>
+			
 		<div/>
 	</body>
 </html>

@@ -32,11 +32,11 @@
 				</p>
 				Supplier price: $<input type="text" name="supplierprice" maxlength="6" size="3">
 				<p>
-				<input type="submit" value="Add">
+				<input type="submit" value="Add product">
 				</p>
 				</form>
 			</p>
-			
+			<p>
 			<table border="1">
 				<caption><h3>Product list</h3></caption>
                 <tr>
@@ -88,6 +88,7 @@
 					
 				<?php endwhile;?>      
             </table>
+			</p>
 		<div/>
 	</body>
 </html>

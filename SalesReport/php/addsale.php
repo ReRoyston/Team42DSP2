@@ -22,69 +22,73 @@
 		<section/>
 		<div class = "main">
 			<p>
-				Item ID: <input type="text" id ="itemid" name = "Item ID" 
-				maxlength = "5" size ="1">
-				<br/>
-				<br/>
-				Quantity: <input type="text" id ="quantity" name = "Quantity" 
-				maxlength = "3" size ="1">
+				<form action="code_only/add_sale.php" method="post">
 				<p>
-				<div class="submitDiv">
-					<input type="submit" class="submitBtns" value="Submit">
-				</div>
+				Product ID: <input type="text" name="prodid" maxlength="4" size="2">
 				</p>
+				Date sold: <input type="text" name="datesold" maxlength="10" size="6">
+				<p>
+				Amount sold: <input type="text" name="amountsold" maxlength="6" size="3">
+				</p>
+				Sold by: <input type="text" name="soldby" maxlength="20" size="17">
+				<p>
+				<input type="submit" value="Add sale">
+				</p>
+				</form>
 			</p>
-			<table border = "1">
-				<caption><h3>Sales list</h3></caption>
+			<p>
+				<font color="green">Use the product list below to make sure you have the correct ID otherwise
+				you won't be able to add it to the Database.</font>
+			</p>
+			<p>
+			<table border="1" align="center">
+				<caption><h3>Product list</h3></caption>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Product Type</th>
+                </tr>
+				
+				<?php
+				//Creates a connection to the local host (127.0.0.1) and root 
+				//which is the default username and password which defaults to nothing
+				$con = mysqli_connect('127.0.0.1','root','');
+				//If the connection isn't successful display a message
+				if(!$con)
+				{
+					echo 'Not Connected To Server';
+				}
+				//If the connection to our sales DB isn't successful display a message
+				if (!mysqli_select_db ($con,'sales'))
+				{
+					echo 'Database Not Selected';
+				}
+				//SQL query to get all product entries from 'products' table
+				$sql = "SELECT prod_id, prod_name, prod_type FROM products;";
+				//If our query isn't successful then display a message
+				if (!mysqli_query($con, $sql))
+				{
+				 echo 'Could not retrieve product list';
+				}
+				//If our query is succesful, save the result into a variable called
+				//$result.
+				else
+				{
+					$result = mysqli_query($con, $sql);
+				}
+				//Fetch the array stored in $result and output it to a table
+				//using a while loop.
+				?>
+				<?php while($row = mysqli_fetch_array($result)):?>
 					<tr>
-						<th>Sale id</th>
-						<th>Product id</th>
-						<th>Date of sale</th>
-						<th>Amount sold</th>
-						<th>Sold by</th>
-						
-					</tr>
-					<?php
-					//Creates a connection to the local host (127.0.0.1) and root 
-					//which is the default username and password which defaults to nothing
-					$con = mysqli_connect('127.0.0.1','root','');
-					//If the connection isn't successful display a message
-					if(!$con)
-					{
-						echo 'Not Connected To Server';
-					}
-					//If the connection to our sales DB isn't successful display a message
-					if (!mysqli_select_db ($con,'sales'))
-					{
-						echo 'Database Not Selected';
-					}
-					//SQL query to get all product entries from 'products' table
-					$sql = "SELECT * FROM `salelist` ORDER BY date_sold DESC";
-					//If our query isn't successful then display a message
-					if (!mysqli_query($con, $sql))
-					{
-					 echo 'Could not retrieve product list';
-					}
-					//If our query is succesful, save the result into a variable called
-					//$result.
-					else
-					{
-						$result = mysqli_query($con, $sql);
-					}
-					//Fetch the array stored in $result and output it to a table
-					//using a while loop.
-					?>
-					<?php while($row = mysqli_fetch_array($result)):?>
-					<tr>
-						<td><?php echo $row['sale_id'];?></td>
 						<td><?php echo $row['prod_id'];?></td>
-						<td><?php echo $row['date_sold'];?></td>
-						<td><?php echo $row['amount_sold'];?></td>
-						<td><?php echo $row['sold_by'];?></td>
+						<td><?php echo $row['prod_name'];?></td>
+						<td><?php echo $row['prod_type'];?></td>
 					</tr>
 					
-				<?php endwhile;?>    
-				</table>
+				<?php endwhile;?>      
+            </table>
+			</p>
 		<div/>
 	</body>
 </html>
