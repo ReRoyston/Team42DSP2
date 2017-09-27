@@ -9,11 +9,36 @@
 	<header/>
 	<body>
 		<nav>
-		  <li><a href="../html/home.html">Home</a></li>
-		  <li><a href="addprod.php">Add product</a></li>
-		  <li><a href="addsale.php">New sale</a></li>
-		  <li><a class="active" href="view.php">View sales</a></li>
-		  <li><a href="reports.php">Reports</a></li>
+		  <ul>
+			  <li><a href="../html/home.html">Home</a></li>
+			  <li class="dropdown">
+				<a href="sale_view.php" class="dropbtn">Sales</a>
+				<div class="dropdown-content">
+				  <a href="sale_view.php">View sales</a>
+				  <a href="sale_new.php">New sale</a>
+				  <a href="#">Edit sales</a>
+				  <a href="#">Remove sales</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
+				<a href="product_view.php" class="dropbtn">Products</a>
+				<div class="dropdown-content">
+				  <a href="product_view.php">View products</a>
+				  <a href="product_new.php">New product</a>
+				  <a href="#">Edit products</a>
+				  <a href="#">Remove products</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
+				<a href="report_tw.php" class="dropbtn">Reports</a>
+				<div class="dropdown-content">
+				  <a href="report_tw.php">This week</a>
+				  <a href="#">Last week</a>
+				  <a href="#">This month</a>
+				  <a href="#">Last month</a>
+				</div>
+			  </li>
+			</ul>
 		</nav>
 		<div>
 			<h2>
@@ -21,14 +46,19 @@
 			</h2>
 		<section/>
 		<div class = "main">
-			<form action="editsale.php" method="post">
-				<p>This page can also be used to edit sales by their <u>Sale ID</u>. </p>
-				<b>Sale ID</b>: <input type="text" name = "saleid" 
-				maxlength = "7" size ="2">
+			<p>
+			Showing the first 20 most recent sales.
+			<!-- Add text, input field and button for filtering search results 
+			with keywords. To do this with sql, the statement goes like this 
+			WHERE sale LIKE 'february%'-->
+			<!--<form action="filter sales method name" method="post">
+				<b>Filter results</b>: <input type="text" name = "filtervalue" 
+				maxlength = "20" size ="10">
 				<p>
-				<input type="submit" value="Edit entry">
+				<input type="submit" value="Search">
 				</p>
-			</form>
+			</form>-->
+			</p>
 				<table border = "1" align="center">
 				<caption><h3>Sales list</h3></caption>
 				<p>
@@ -62,6 +92,7 @@
 					FROM salelist
 					RIGHT JOIN products
 					ON salelist.prod_id = products.prod_id
+					WHERE salelist.sale_id IS NOT NULL
 					ORDER BY salelist.date_sold DESC;";
 					//If our query isn't successful then display a message
 					if (!mysqli_query($con, $sql))

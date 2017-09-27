@@ -30,7 +30,8 @@
 		//If our query isn't successful then display a message
 		if (!mysqli_query($con,$sql))
 		{
-		 echo 'Not added';
+		 echo 'If your sale does not have a valid product ID it will not be added
+		 to the DataBase';
 		}
 		//If it is successful it will navigate back to the add sale page
 		//in 8 seconds.

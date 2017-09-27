@@ -3,44 +3,59 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
-	<title>Add new product</title>
+	<title>View all sales</title>
 	<header>
 		<h1>Sales report system</h1>
 	<header/>
 	<body>
 		<nav>
-		  <li><a href="../html/home.html">Home</a></li>
-		  <li><a class="active" href="addprod.php">Add product</a></li>
-		  <li><a href="addsale.php">New sale</a></li>
-		  <li><a href="view.php">View sales</a></li>
-		  <li><a href="reports.php">Reports</a></li>
+		  <ul>
+			  <li><a href="../html/home.html">Home</a></li>
+			  <li class="dropdown">
+				<a href="sale_view.php" class="dropbtn">Sales</a>
+				<div class="dropdown-content">
+				  <a href="sale_view.php">View sales</a>
+				  <a href="sale_new.php">New sale</a>
+				  <a href="#">Edit sales</a>
+				  <a href="#">Remove sales</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
+				<a href="product_view.php" class="dropbtn">Products</a>
+				<div class="dropdown-content">
+				  <a href="product_view.php">View products</a>
+				  <a href="product_new.php">New product</a>
+				  <a href="#">Edit products</a>
+				  <a href="#">Remove products</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
+				<a href="report_tw.php" class="dropbtn">Reports</a>
+				<div class="dropdown-content">
+				  <a href="report_tw.php">This week</a>
+				  <a href="#">Last week</a>
+				  <a href="#">This month</a>
+				  <a href="#">Last month</a>
+				</div>
+			  </li>
+			</ul>
 		</nav>
 		<div>
 			<h2>
-				Add a new product to the product list
+				View products
 			</h2>
 		<section/>
 		<div class = "main">
-			<p>
-			
-				<form action="code_only/add_product.php" method="post">
-				<table>
-				
-				<tr><td>Product name:</td><td class="inputfield"> <input type="text" name="prodname" size="40"></td></tr>
-				
-				<tr><td>Product type:</td><td class="inputfield">  <input type="text" name="prodtype"></td></tr>
-				
-				<tr><td>Sale price: $</td><td class="inputfield"><input type="text" name="saleprice" maxlength="6" size="3"></td></tr>
-				
-				<tr><td>Supplier price: $</td><td class="inputfield"><input type="text" name="supplierprice" maxlength="6" size="3"></td></tr>
-				</table>
+			<br>
+			Showing the first 20 most recently added products.
+			<!--<form action="filter products method name" method="post">
+				<b>Filter results</b>: <input type="text" name = "filtervalue" 
+				maxlength = "20" size ="10">
 				<p>
-				<input type="submit" value="Add product">
+				<input type="submit" value="Search">
 				</p>
-				</form>
+			</form>-->
 				
-			</p>
-			<p>
 			<table border="1" align="center">
 				<caption><h3>Product list</h3></caption>
                 <tr>
@@ -66,7 +81,8 @@
 					echo 'Database Not Selected';
 				}
 				//SQL query to get all product entries from 'products' table
-				$sql = "SELECT * FROM `products`";
+				$sql = "SELECT * FROM `products`
+				ORDER BY prod_id DESC";
 				//If our query isn't successful then display a message
 				if (!mysqli_query($con, $sql))
 				{
