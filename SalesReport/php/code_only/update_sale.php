@@ -88,7 +88,7 @@
 				<?php endwhile;?>    
 				</table>
 				<?php
-					header("refresh:10; url=../view.php");
+					header("refresh:10; url=../sale_view.php");
 				?>
 	</body>
 </html>

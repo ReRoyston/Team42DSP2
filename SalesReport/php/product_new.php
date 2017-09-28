@@ -42,10 +42,13 @@
 		</nav>
 		<div>
 			<h2>
-				Add a new product to the product list
+				New product
 			</h2>
 		<section/>
 		<div class = "main">
+			<p>
+			
+			<p>
 			<p>
 				<form action="code_only/add_product.php" method="post">
 				<table>
@@ -65,15 +68,28 @@
 			</p>
 			<br>
 			
-			<form action="editsale.php" method="post">
+			<form action="" method="post">
 				<p>To check if a product already exists, search by 
 				<u>product type</u>. </p>
 				<b>Product type</b>: <input type="text" name = "producttype" 
-				maxlength = "7" size ="2">
+				maxlength = "20" size ="10">
 				<p>
 				<input type="submit" value="Search">
 				</p>
 			</form>
+			
+			<?php
+				if (isset($_POST['producttype'])) {
+					if ($_POST['producttype'] != "") {
+						echo "Showing results for search of: '".$_POST['producttype']."'";
+					}
+					else
+					{
+						echo "<font color=\"red\">Nothing entered to search for</font>";
+					}
+				}
+				
+			?>
 			
 			<table border="1" align="center">
 				<caption><h3>Product list</h3></caption>
@@ -99,8 +115,16 @@
 				{
 					echo 'Database Not Selected';
 				}
+				if (isset($_POST['producttype'])) {
+					$prodsearch = $_POST['producttype'];
+					$sql = "SELECT * FROM products 
+					WHERE prod_type LIKE '%$prodsearch%';";
+				}
 				//SQL query to get all product entries from 'products' table
-				$sql = "SELECT * FROM `products`";
+				else {
+					$sql = "SELECT * FROM products
+					LIMIT 20;";
+				}
 				//If our query isn't successful then display a message
 				if (!mysqli_query($con, $sql))
 				{

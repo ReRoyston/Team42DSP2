@@ -71,6 +71,29 @@
 				Use the product list below to make sure you have the <font color="1F8FFF"><b>correct ID</b></font> otherwise
 				you won't be able to add it to the Database.
 			</p>
+			<br>
+			<form action="" method="post">
+				<p>You can search a product by entering a 
+				<u>Product type or name</u>. </p>
+				<b>Product type / name:</b> <input type="text" name = "producttype" 
+				maxlength = "20" size ="10">
+				<p>
+				<input type="submit" value="Search">
+				</p>
+			</form>
+			
+			<?php
+				if (isset($_POST['producttype'])) {
+					if ($_POST['producttype'] != "") {
+						echo "Showing results for search of: '".$_POST['producttype']."'";
+					}
+					else
+					{
+						echo "Displaying first 20 rows of products";
+					}
+				}
+				
+			?>
 			<p>
 			<table border="1" align="center">
 				<caption><h3>Product list</h3></caption>
@@ -94,8 +117,20 @@
 				{
 					echo 'Database Not Selected';
 				}
-				//SQL query to get relevant product fields from 'products' table
-				$sql = "SELECT prod_id, prod_name, prod_type FROM products;";
+				if (!mysqli_select_db ($con,'sales'))
+				{
+					echo 'Database Not Selected';
+				}
+				if (isset($_POST['producttype'])) {
+					$prodsearch = $_POST['producttype'];
+					$sql = "SELECT * FROM products 
+					WHERE prod_type LIKE '%$prodsearch%' OR prod_name LIKE '%$prodsearch%';";
+				}
+				//SQL query to get all product entries from 'products' table
+				else {
+					$sql = "SELECT * FROM products
+					LIMIT 20;";
+				}
 				//If our query isn't successful then display a message
 				if (!mysqli_query($con, $sql))
 				{
