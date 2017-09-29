@@ -1,13 +1,32 @@
 <!DOCTYPE html>
+
+
+ <?php
+			
+			$HighestID = "0";
+			$date = new DateTime();
+			$months = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
+			//Creates a connection to the local host (127.0.0.1) and root 
+			//which is the default username and password which defaults to nothing
+			$con = mysqli_connect('127.0.0.1','root','');
+			//If the connection isn't successful display a message
+			if(!$con)
+			{
+				echo 'Not Connected To Server';
+			}
+			//If the connection to our sales DB isn't successful display a message
+			if (!mysqli_select_db ($con,'sales'))
+			{
+				echo 'Database Not Selected';
+			}
+?>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
-	<title>Add sale</title>
-	<header>
-		<h1>Sales report system</h1>
-	<header/>
+	<title>New sale</title>
 	<body>
+	<br>
 		<nav>
 		  <ul>
 			  <li><a href="../html/home.html">Home</a></li>
@@ -41,119 +60,171 @@
 			</ul>
 		</nav>
 		<div>
-			<h2>
-				Add a new sale entry
-			</h2>
+			<h1>
+				New sale
+			</h1>
 		<section/>
 		<div class = "main">
-			<p>
-				<form action="code_only/add_sale.php" method="post">
+			
+			<?php
+			//Gets the highest id then adds + 1 for our new sale entry
+			$sql = "SELECT sale_id FROM salelist";
+			{
+				$result = mysqli_query($con, $sql);
+			}
+			while($row = mysqli_fetch_array($result)):
+			if ($row['sale_id'] > $HighestID)
+			{
+				$HighestID = $row['sale_id'];
+			}
+			endwhile;
+			?>	
+				<form action="" method="post">
+				<?php
+				echo '<p>All items will be added to the same sale unless you tick this box<br>
+				<font  color="1F8FFF">New sale? <input type="checkbox" name="whichsale"></font></p>';
+				?>
 					<table>
 						<tr>
 							<td>Product ID:</td><td class="inputfield"> <input type="text" name="prodid" maxlength="4" size="2"></td>
 						</tr>
 						<tr>
-							<td>Date sold:</td><td class="inputfield"> <input type="text" name="datesold" maxlength="10" size="6"></td>
+							<td>Date sold:</td>
+							<td class="inputfield">
+								<select name="msold">
+									<?php foreach($months as $key => $month) { ?>
+										<?php $default_month = ($key == $date->format('m'))?'selected':''; ?>
+										<option <?php echo $default_month; ?> value="<?php echo $key; ?>">
+											<?php echo $month; ?>
+										</option>
+									<?php } ?>
+								</select>
+
+
+								<select name="dsold">
+									<?php for($day = 1; $day <= 31; $day++) { ?>
+										<?php $default_day = ($day == $date->format('d'))?'selected':''; ?>
+										<option <?php echo $default_day; ?> value="<?php echo $day; ?>">
+											<?php echo $day; ?>
+										</option>
+									<?php } ?>
+								</select>
+
+
+								<select name="ysold">
+									<?php for($year = $date->format('Y'); $year <= 2020; $year++) { ?>
+										<option value="<?php echo $year; ?>">
+											<?php echo $year; ?>
+										</option>
+									<?php } ?>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td>Amount sold:</td><td class="inputfield"> <input type="text" name="amountsold" maxlength="6" size="3"></td>
 						</tr>
 						<tr>
-							<td>Sold by:</td><td class="inputfield"> <input type="text" name="soldby" maxlength="15" size="12"></td>
+							<td>Sold by:</td><td class="inputfield"> <input type="text" name="soldby" "maxlength="15" size="12"></td>
 						</tr>
 					</table>
 					<p>
 						<input type="submit" value="Add sale">
 					</p>
-				</form>
-			</p>
-			<p>
-				Use the product list below to make sure you have the <font color="1F8FFF"><b>correct ID</b></font> otherwise
-				you won't be able to add it to the Database.
-			</p>
-			<br>
-			<form action="" method="post">
-				<p>You can search a product by entering a 
-				<u>Product type or name</u>. </p>
-				<b>Product type / name:</b> <input type="text" name = "producttype" 
-				maxlength = "20" size ="10">
-				<p>
-				<input type="submit" value="Search">
-				</p>
-			</form>
-			
+					</form>
+				
+				
+				
 			<?php
-				if (isset($_POST['producttype'])) {
-					if ($_POST['producttype'] != "") {
-						echo "Showing results for search of: '".$_POST['producttype']."'";
+			//Get the sale details entered if all fields have been filled.
+			if (isset($_POST['prodid']) && isset($_POST['amountsold']) && isset($_POST['soldby'])) 
+			{
+				if ($_POST['prodid'] != "" && $_POST['amountsold'] != "" && $_POST['soldby'])
+				{
+				if (isset($_POST['whichsale']))
+				{
+					$HighestID = $HighestID + 1;
+				}
+				$ProdID = $_POST['prodid'];
+				$DaySold = $_POST['dsold'];
+				$MonthSold = $_POST['msold'];
+				if ($MonthSold = 1 || $MonthSold = 2 || $MonthSold = 3 || $MonthSold = 4 || 
+				$MonthSold = 5 || $MonthSold = 6 || $MonthSold = 7 || $MonthSold = 8 || 
+				$MonthSold = 9)
+				{
+					$MonthSold = "0".$_POST['msold'];
+				}
+				$YearSold = $_POST['ysold'];
+				$DateSold = $DaySold."/".$MonthSold."/".$YearSold;
+				$AmountSold = $_POST['amountsold'];
+				//Takes the user input values and adds them to our DB using an INSERT statement
+				$sql = "INSERT INTO SALELIST (sale_id, prod_id, date_sold, amount_sold, sold_by) 
+				values ('$HighestID', '$ProdID', '$DateSold', '$AmountSold', '$SoldBy')";
+				//If our query isn't successful then display a message
+				if (!mysqli_query($con,$sql))
+				{
+				 echo '<font color="red">Make sure you\'re using a valid Product ID and not duplicating a sale. <br>
+				 Tick the box above to start a new sale.</font>';
+				}
+				//If it is successful it will navigate back to the add sale page
+				//in 8 seconds.
+				else
+				{
+					 echo '<font color="green">New sale added to database successfully</font>';
+				}
+				?>﻿
+				
+				<table border = "1">
+						<caption><h3>On this sale so far</h3></caption>
+							<tr>
+								<th>Sale ID</th>
+								<th>Product ID</th>
+								<th>Date of sale</th>
+								<th>Amount sold</th>
+								<th>Sold by</th>
+								
+								
+							</tr>
+							<?php
+							
+							//SQL query to get all product entries from 'products' table
+							$sql = "SELECT * FROM salelist
+							WHERE sale_id = $HighestID";
+							//If our query isn't successful then display a message
+							if (!mysqli_query($con, $sql))
+							{
+							 echo 'Could not retrieve product list';
+							}
+							//If our query is succesful, save the result into a variable called
+							//$result.
+							else
+							{
+								$result = mysqli_query($con, $sql);
+							}
+							//Fetch the array stored in $result and output it to a table
+							//using a while loop.
+							?>
+							<?php while($row = mysqli_fetch_array($result)):?>
+							<tr>
+								<td><?php echo $row['sale_id'];?></td>
+								<td><?php echo $row['prod_id'];?></td>
+								<td><?php echo $row['date_sold'];?></td>
+								<td><?php echo $row['amount_sold'];?></td>
+								<td><?php echo $row['sold_by'];?></td>
+							</tr>
+							
+						<?php endwhile;?>    
+						</table>
+					<?php
 					}
 					else
 					{
-						echo "Displaying first 20 rows of products";
+						echo "<font color=\"red\">All fields must be filled to add a new sale to the DB.</font>";
 					}
-				}
-				
-			?>
-			<p>
-			<table border="1" align="center">
-				<caption><h3>Product list</h3></caption>
-                <tr>
-                    <th><font color="1F8FFF">Product ID<font></th>
-                    <th>Product Name</th>
-                    <th>Product Type</th>
-                </tr>
-				
-				<?php
-				//Creates a connection to the local host (127.0.0.1) and root 
-				//which is the default username and password which defaults to nothing
-				$con = mysqli_connect('127.0.0.1','root','');
-				//If the connection isn't successful display a message
-				if(!$con)
-				{
-					echo 'Not Connected To Server';
-				}
-				//If the connection to our sales DB isn't successful display a message
-				if (!mysqli_select_db ($con,'sales'))
-				{
-					echo 'Database Not Selected';
-				}
-				if (!mysqli_select_db ($con,'sales'))
-				{
-					echo 'Database Not Selected';
-				}
-				if (isset($_POST['producttype'])) {
-					$prodsearch = $_POST['producttype'];
-					$sql = "SELECT * FROM products 
-					WHERE prod_type LIKE '%$prodsearch%' OR prod_name LIKE '%$prodsearch%';";
-				}
-				//SQL query to get all product entries from 'products' table
-				else {
-					$sql = "SELECT * FROM products
-					LIMIT 20;";
-				}
-				//If our query isn't successful then display a message
-				if (!mysqli_query($con, $sql))
-				{
-				 echo 'Could not retrieve product list';
-				}
-				//If our query is succesful, save the result into a variable called
-				//$result.
-				else
-				{
-					$result = mysqli_query($con, $sql);
-				}
-				//Fetch the array stored in $result and output it to a table
-				//using a while loop.
-				?>
-				<?php while($row = mysqli_fetch_array($result)):?>
-					<tr>
-						<td><font color="1F8FFF"><b><?php echo $row['prod_id'];?></b></font></td>
-						<td><?php echo $row['prod_name'];?></td>
-						<td><?php echo $row['prod_type'];?></td>
-					</tr>
+					}
 					
-				<?php endwhile;?>      
-            </table>
+					?>
+					<p>
+				
 			</p>
 		<div/>
 	</body>

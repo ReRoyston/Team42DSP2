@@ -41,7 +41,7 @@
 			 <br>You will be redirected to the new sale page again
 			 <br>In 8 seconds.';
 		}
-		header("refresh:8; url=../sale_new.php");
+		//header("refresh:8; url=../sale_new.php");
 
 		?>﻿
 		

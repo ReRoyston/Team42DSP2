@@ -46,6 +46,10 @@ h2 {
 	padding-right: 15%;
 }
 
+#saleId {
+	float: left;
+}
+
 .submitDiv {
 	text-align:center;
 }

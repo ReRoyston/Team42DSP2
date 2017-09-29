@@ -47,17 +47,28 @@
 		<section/>
 		<div class = "main">
 			<p>
-			Showing the first 20 most recent sales.
-			<!-- Add text, input field and button for filtering search results 
-			with keywords. To do this with sql, the statement goes like this 
-			WHERE sale LIKE 'february%'-->
-			<!--<form action="filter sales method name" method="post">
-				<b>Filter results</b>: <input type="text" name = "filtervalue" 
+			<form action="" method="post">
+				<p>You can search a sale by entering part of all of a  
+				<u>Sale date</u>. </p>
+				<b>Sale date:</b> <input type="text" name = "saledate" 
 				maxlength = "20" size ="10">
 				<p>
 				<input type="submit" value="Search">
 				</p>
-			</form>-->
+			</form>
+			<?php
+				if (isset($_POST['saledate'])) {
+					if ($_POST['saledate'] != "") {
+						echo "Showing results for search of: '".$_POST['saledate']."'";
+					}
+					else
+					{
+						echo "Displaying first 20 rows of products".$_POST['saledate'];
+					}
+				}
+				
+			?>
+			
 			</p>
 				<table border = "1" align="center">
 				<caption><h3>Sales list</h3></caption>
@@ -85,15 +96,30 @@
 					{
 						echo 'Database Not Selected';
 					}
+					
+					
 					//SQL query to get all relevant sales and product details to show to 
 					//the user
-					$sql = "SELECT salelist.date_sold, salelist.sale_id, products.prod_id, products.prod_name,  salelist.sold_by, salelist.amount_sold, 
-					(salelist.amount_sold * (products.sale_price - products.supplier_price)) AS profit
-					FROM salelist
-					RIGHT JOIN products
-					ON salelist.prod_id = products.prod_id
-					WHERE salelist.sale_id IS NOT NULL
-					ORDER BY salelist.date_sold DESC;";
+					if (isset($_POST['saledate'])) {
+						$searchdate = $_POST['saledate'];
+						$sql = "SELECT salelist.date_sold, salelist.sale_id, products.prod_id, products.prod_name,  salelist.sold_by, salelist.amount_sold, 
+						(salelist.amount_sold * (products.sale_price - products.supplier_price)) AS profit
+						FROM salelist
+						RIGHT JOIN products
+						ON salelist.prod_id = products.prod_id
+						WHERE salelist.sale_id IS NOT NULL AND salelist.date_sold LIKE '%$searchdate%'
+						ORDER BY salelist.date_sold, salelist.sale_id DESC;";
+					}
+					else {
+						$sql = "SELECT salelist.date_sold, salelist.sale_id, products.prod_id, products.prod_name,  salelist.sold_by, salelist.amount_sold, 
+						(salelist.amount_sold * (products.sale_price - products.supplier_price)) AS profit
+						FROM salelist
+						RIGHT JOIN products
+						ON salelist.prod_id = products.prod_id
+						WHERE salelist.sale_id IS NOT NULL
+						ORDER BY salelist.date_sold DESC, salelist.sale_id ASC
+						LIMIT 20;";
+					}
 					//If our query isn't successful then display a message
 					if (!mysqli_query($con, $sql))
 					{

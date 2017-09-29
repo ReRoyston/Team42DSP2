@@ -48,22 +48,36 @@
 		<div class = "main">
 			<br>
 			Showing the first 20 most recently added products.
-			<!--<form action="filter products method name" method="post">
-				<b>Filter results</b>: <input type="text" name = "filtervalue" 
+			
+			<form action="" method="post">
+				<p>You can search a product by entering a 
+				<u>Product type or name</u>. </p>
+				<b>Product type / name:</b> <input type="text" name = "producttype" 
 				maxlength = "20" size ="10">
 				<p>
 				<input type="submit" value="Search">
 				</p>
-			</form>-->
+			</form>
+			
+			<?php
+				if (isset($_POST['producttype'])) {
+					if ($_POST['producttype'] != "") {
+						echo "Showing results for search of: '".$_POST['producttype']."'";
+					}
+					else
+					{
+						echo "Displaying first 20 rows of products";
+					}
+				}
 				
+			?>
+			<p>
 			<table border="1" align="center">
 				<caption><h3>Product list</h3></caption>
                 <tr>
-                    <th>Product ID</th>
+                    <th><font color="1F8FFF">Product ID<font></th>
                     <th>Product Name</th>
                     <th>Product Type</th>
-                    <th>Sale price</th>
-					<th>Supplier price</th>
                 </tr>
 				
 				<?php
@@ -80,9 +94,20 @@
 				{
 					echo 'Database Not Selected';
 				}
+				if (!mysqli_select_db ($con,'sales'))
+				{
+					echo 'Database Not Selected';
+				}
+				if (isset($_POST['producttype'])) {
+					$prodsearch = $_POST['producttype'];
+					$sql = "SELECT * FROM products 
+					WHERE prod_type LIKE '%$prodsearch%' OR prod_name LIKE '%$prodsearch%';";
+				}
 				//SQL query to get all product entries from 'products' table
-				$sql = "SELECT * FROM `products`
-				ORDER BY prod_id DESC";
+				else {
+					$sql = "SELECT * FROM products
+					LIMIT 20;";
+				}
 				//If our query isn't successful then display a message
 				if (!mysqli_query($con, $sql))
 				{
@@ -99,11 +124,9 @@
 				?>
 				<?php while($row = mysqli_fetch_array($result)):?>
 					<tr>
-						<td><?php echo $row['prod_id'];?></td>
+						<td><font color="1F8FFF"><b><?php echo $row['prod_id'];?></b></font></td>
 						<td><?php echo $row['prod_name'];?></td>
 						<td><?php echo $row['prod_type'];?></td>
-						<td><?php echo $row['sale_price'];?></td>
-						<td><?php echo $row['supplier_price'];?></td>
 					</tr>
 					
 				<?php endwhile;?>      
