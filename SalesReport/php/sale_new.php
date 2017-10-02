@@ -88,6 +88,15 @@
 						<tr>
 							<td>Product ID:</td><td class="inputfield"> <input type="text" name="prodid" maxlength="4" size="2"></td>
 						</tr>
+                        <?php   
+                        $select_query= "SELECT prod_name FROM products";
+                        $select_query_run= mysqli_query($con, $select_query);
+                        echo "<select>";
+                        while($select_query_array = mysqli_fetch_array($select_query_run)){
+                         echo "<option value='' >".$select_query_array['prod_name']."</option>";
+                        }
+                         echo "</select>";
+                        ?>
 						<tr>
 							<td>Date sold:</td>
 							<td class="inputfield">
@@ -156,6 +165,7 @@
 				$YearSold = $_POST['ysold'];
 				$DateSold = $DaySold."/".$MonthSold."/".$YearSold;
 				$AmountSold = $_POST['amountsold'];
+                $SoldBy = $_POST['soldby'];
 				//Takes the user input values and adds them to our DB using an INSERT statement
 				$sql = "INSERT INTO SALELIST (sale_id, prod_id, date_sold, amount_sold, sold_by) 
 				values ('$HighestID', '$ProdID', '$DateSold', '$AmountSold', '$SoldBy')";
