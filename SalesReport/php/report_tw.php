@@ -46,6 +46,7 @@
 			</h2>
 		<section/>
 		<div class = "main">
+            <form action="" method="post">
 			<p>
 				<table>
 					<tr>
@@ -55,10 +56,54 @@
 					
 					<tr>
 						<td class="radiotable"><input type="radio" name="gender" value="thismonth"> This month</td>
-						<td class="radiotable"><input type="radio" name="gender" value="lastmonth"> Last month</td>
+						<td class="radiotable"><input type="radio" name="gender" value=""> Last month</td>
 					</tr>
-				<table>
+                </table>
 			</p>
+            <p>
+						<input type="submit" value="Generate report">
+					</p>
+                </form>
+                  
+                    
+                    <?php
+					//Creates a connection to the local host (127.0.0.1) and root 
+					//which is the default username and password which defaults to nothing
+					$con = mysqli_connect('127.0.0.1','root','');
+					//If the connection isn't successful display a message
+					if(!$con)
+					{
+						echo 'Not Connected To Server';
+					}
+					//If the connection to our sales DB isn't successful display a message
+					if (!mysqli_select_db ($con,'sales'))
+					{
+						echo 'Database Not Selected';
+					}
+                    
+                    if(isset($_POST['gender']))
+                    {
+                        //doing some code to match if it is week or month, and then generate CSV file
+                        if ($_POST['gender']=="thisweek")
+                        {
+                            $myfile = fopen("thisweek.CSV", "w")
+                        }
+                        if ($_POST['gender']=="lastweek")
+                        {
+                            $myfile = fopen("lastweek.CSV", "w")
+                        }
+                        if ($_POST['gender']=="thismonth")
+                        {
+                            $myfile = fopen("thismonth.CSV", "w")
+                        }
+                        if ($_POST['gender']=="lastmonth")
+                        {
+                            $myfile = fopen("lastmonth.CSV", "w")
+                        }
+                        
+                    }
+            
+                    ?>
 		
 			
 		<div/>
