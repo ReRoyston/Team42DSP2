@@ -25,7 +25,7 @@
 				<div class="dropdown-content">
 				  <a href="product_view.php">View products</a>
 				  <a href="product_new.php">New product</a>
-				  <a href="#">Edit products</a>
+				  <a href="product_edit.php">Edit products</a>
 				  <a href="#">Remove products</a>
 				</div>
 			  </li>
@@ -42,19 +42,19 @@
 		</nav>
 		<div>
 			<h2>
-				Edit a sale by it's ID.
+				Edit a product by it's ID.
 			</h2>
-		<section/>
+		</div>
 		<div class = "main">
 			<p>
 				<table border = "1">
-				<caption><h3>Sales list</h3></caption>
+				<caption><h3>Products list</h3></caption>
 					<tr>
-						<th>Sale ID</th>
 						<th>Product ID</th>
-						<th>Date of sale</th>
-						<th>Amount sold</th>
-						<th>Sold by</th>
+						<th>Product Name</th>
+                        <th>Product Type</th>
+						<th>Sale Price</th>
+						<th>Supply Price</th>
 					</tr>
 					<?php
 					//sessions variable are global variables that are accessable over multiple
@@ -73,15 +73,11 @@
 					{
 					 echo 'Database Not Selected';
 					}
-					//Saves the Sale ID so we can use it when we're updating it's values
-					$_SESSION["SaleIdToUpdate"] = $_POST['saleid'];
-					//Get the values entered on the web page for the following field
-					$SaleID = $_POST['saleid'];
-					//Get the sale entry with this Sale ID
-					$sql = "SELECT * FROM salelist WHERE sale_id = '$SaleID'";
+
+					$sql = "SELECT * FROM products";
 					if (!mysqli_query($con,$sql))
 					{
-						echo 'Could not find record for Sale ID: '.$_SESSION["SaleIdToUpdate"];
+						echo 'Could not find record';
 					}
 					//If our query is succesful, save the result into a variable called
 					//$result. The amount of rows stored in the result is then stored as well.
@@ -93,48 +89,83 @@
 						$nResults = mysqli_num_rows($result);
 					}
 					if ($nResults > 0) {
-						echo 'Showing results for sale with ID No.: '.$_SESSION["SaleIdToUpdate"];
+						echo 'Showing results for product with ID';
 					}
 					else
 					{
-						echo '<font color="red">There was no sale found with that Sale ID. Return to the
-						view sales page and use the salelist table to find a valid Sale ID.</font>';
+						echo '<font color="red">There was no product found. Return to the
+						view product page and check the product list.</font>';
 					}
 					//Fetch the array stored in $result and output it to a table
 					//using a while loop.
 					?>
 					<?php while($row = mysqli_fetch_array($result)):?>
 					<tr>
-						<td><?php echo $row['sale_id'];?></td>
 						<td><?php echo $row['prod_id'];?></td>
-						<td><?php echo $row['date_sold'];?></td>
-						<td><?php echo $row['amount_sold'];?></td>
-						<td><?php echo $row['sold_by'];?></td>
+						<td><?php echo $row['prod_name'];?></td>
+						<td><?php echo $row['prod_type'];?></td>
+						<td><?php echo $row['sale_price'];?></td>
+                        <td><?php echo $row['supplier_price'];?></td>
 					</tr>
 					
 				<?php endwhile;?>    
 				</table>
 				</p>
+        
 				<p>
-				<form action="code_only/update_sale.php" method="post">
+				<form action="" method="post">
 					<table>
 						<tr>
 							<td>Product ID:</td><td class="inputfield"> <input type="text" name="prodid" maxlength="4" size="2"></td>
 						</tr>
-						<tr>
-							<td>Date sold:</td><td class="inputfield"> <input type="text" name="datesold" maxlength="10" size="6"></td>
+                        <tr>
+							<td>Product Name:</td><td class="inputfield"> <input type="text" name="prodname" maxlength="40" size="30"></td>
 						</tr>
 						<tr>
-							<td>Amount sold:</td><td class="inputfield"> <input type="text" name="amountsold" maxlength="6" size="3"></td>
+							<td>Product Type:</td><td class="inputfield"> <input type="text" name="prodtype" maxlength="30" size="30"></td>
 						</tr>
 						<tr>
-							<td>Sold by:</td><td class="inputfield"> <input type="text" name="soldby" maxlength="15" size="12"></td>
+							<td>Sales Price:</td><td class="inputfield"> <input type="text" name="saleprice" maxlength="6" size="6"></td>
+						</tr>
+						<tr>
+							<td>Supply Price:</td><td class="inputfield"> <input type="text" name="supplyprice" maxlength="6" size="6"></td>
 						</tr>
 					</table>
 					<p>
-						<input type="submit" value="Update sale">
+						<input type="submit" value="Update products">
 					</p>
 				</form>
+        
+        <?php
+			//Get the sale details entered if all fields have been filled.
+			if (isset($_POST['prodid']) && isset($_POST['prodname']) && isset($_POST['saleprice'])&& isset($_POST['prodtype'])&& isset($_POST['supplyprice'])) 
+			{
+				if ($_POST['prodid'] != "" && $_POST['prodname'] != "" && $_POST['saleprice'])
+				{
+				
+				$ProdID = $_POST['prodid'];
+				$ProductName = $_POST['prodname'];
+				$ProductType = $_POST['prodtype'];
+				
+				$SalesPrice = $_POST['saleprice'];
+                $SupplyPrice = $_POST['supplyprice'];
+				//Takes the user input values and adds them to our DB using an INSERT statement
+				$sql = "UPDATE products SET prod_name='$ProductName',prod_type='$ProductType', sale_price='$SalesPrice', supplier_price='$SupplyPrice' WHERE prod_id='$ProdID' ";
+				//If our query isn't successful then display a message
+				if (!mysqli_query($con,$sql))
+				{
+				 echo '<font color="red">Make sure you\'re using a valid Product ID and not duplicating them.</font>';
+				}
+				
+
+				else
+				{
+					 echo '<font color="green">Product update to database successfully</font>';
+                    header("refresh:5; product_edit.php");
+				}
+                }
+            }
+				?>
 				</p>
 			
 		<div/>

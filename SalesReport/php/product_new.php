@@ -25,7 +25,7 @@
 				<div class="dropdown-content">
 				  <a href="product_view.php">View products</a>
 				  <a href="product_new.php">New product</a>
-				  <a href="#">Edit products</a>
+				  <a href="product_edit.php">Edit products</a>
 				  <a href="#">Remove products</a>
 				</div>
 			  </li>
