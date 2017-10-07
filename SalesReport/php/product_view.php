@@ -4,9 +4,6 @@
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
 	<title>View all sales</title>
-	<header>
-		<h1>Sales report system</h1>
-	<header/>
 	<body>
 		<nav>
 		  <ul>
@@ -78,6 +75,7 @@
                     <th><font color="1F8FFF">Product ID<font></th>
                     <th>Product Name</th>
                     <th>Product Type</th>
+					<th>Stock remaining</th>
                 </tr>
 				
 				<?php
@@ -106,6 +104,7 @@
 				//SQL query to get all product entries from 'products' table
 				else {
 					$sql = "SELECT * FROM products
+					ORDER BY prod_type ASC, prod_name ASC
 					LIMIT 20;";
 				}
 				//If our query isn't successful then display a message
@@ -127,6 +126,7 @@
 						<td><font color="1F8FFF"><b><?php echo $row['prod_id'];?></b></font></td>
 						<td><?php echo $row['prod_name'];?></td>
 						<td><?php echo $row['prod_type'];?></td>
+						<td><?php echo $row['units_in_stock'];?></td>
 					</tr>
 					
 				<?php endwhile;?>      

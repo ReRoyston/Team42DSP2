@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-
-
  <?php
-			
+			session_start();
 			$HighestID = "0";
 			$date = new DateTime();
 			$months = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
@@ -26,7 +24,6 @@
 	</head>
 	<title>New sale</title>
 	<body>
-	<br>
 		<nav>
 		  <ul>
 			  <li><a href="../html/home.html">Home</a></li>
@@ -86,17 +83,18 @@
 				?>
 					<table>
 						<tr>
-							<td>Product ID:</td><td class="inputfield"> <input type="text" name="prodid" maxlength="4" size="2"></td>
+							<td>Product Name:</td><td>
+							<?php   
+							$select_query= "SELECT prod_id, prod_name FROM PRODUCTS ORDER BY prod_name ASC";
+							$select_query_run= mysqli_query($con, $select_query);
+							echo "<select name='prodid'>";
+							while($row = mysqli_fetch_array($select_query_run)){
+							 echo "<option value='".$row['prod_id']."' >".$row['prod_name']."</option>";
+							}
+							 echo "</select>";
+							?>
+							</td>
 						</tr>
-                        <?php   
-                        $select_query= "SELECT prod_name FROM products";
-                        $select_query_run= mysqli_query($con, $select_query);
-                        echo "<select>";
-                        while($select_query_array = mysqli_fetch_array($select_query_run)){
-                         echo "<option value='' >".$select_query_array['prod_name']."</option>";
-                        }
-                         echo "</select>";
-                        ?>
 						<tr>
 							<td>Date sold:</td>
 							<td class="inputfield">
@@ -133,8 +131,32 @@
 							<td>Amount sold:</td><td class="inputfield"> <input type="text" name="amountsold" maxlength="6" size="3"></td>
 						</tr>
 						<tr>
-							<td>Sold by:</td><td class="inputfield"> <input type="text" name="soldby" "maxlength="15" size="12"></td>
+							<td>Sold by:</td>
+							<td class="inputfield">
+								<?php   
+								$select_query= "SELECT emp_id, emp_name FROM EMPLOYEES ORDER BY emp_name ASC";
+								$select_query_run= mysqli_query($con, $select_query);
+								echo "<select name='soldby'>";
+								while($row = mysqli_fetch_array($select_query_run)){
+								
+								/* $$$$$$$$$$$$$$$$$$$$$$$$$						Write code here to pre-select the name of the previous entrant*/
+									/*if (isset($_SESSION['Sold_By']))
+									{
+										if ($row['emp_name'] = $_SESSION['Sold_By'])
+										{
+										echo "<option value='".$row['emp_name']."' selected>".$row['emp_name']."</option>";
+										}
+										else
+										{*/
+											echo "<option value='".$row['emp_name']."' >".$row['emp_name']."</option>";
+										//}
+									//}
+								}
+								 echo "</select>";
+								?>
+							</td>
 						</tr>
+						
 					</table>
 					<p>
 						<input type="submit" value="Add sale">
@@ -149,56 +171,90 @@
 			{
 				if ($_POST['prodid'] != "" && $_POST['amountsold'] != "" && $_POST['soldby'])
 				{
-				if (isset($_POST['whichsale']))
-				{
-					$HighestID = $HighestID + 1;
-				}
-				$ProdID = $_POST['prodid'];
-				$DaySold = $_POST['dsold'];
-				$MonthSold = $_POST['msold'];
-				if ($MonthSold = 1 || $MonthSold = 2 || $MonthSold = 3 || $MonthSold = 4 || 
-				$MonthSold = 5 || $MonthSold = 6 || $MonthSold = 7 || $MonthSold = 8 || 
-				$MonthSold = 9)
-				{
-					$MonthSold = "0".$_POST['msold'];
-				}
-				$YearSold = $_POST['ysold'];
-				$DateSold = $DaySold."/".$MonthSold."/".$YearSold;
-				$AmountSold = $_POST['amountsold'];
-                $SoldBy = $_POST['soldby'];
-				//Takes the user input values and adds them to our DB using an INSERT statement
-				$sql = "INSERT INTO SALELIST (sale_id, prod_id, date_sold, amount_sold, sold_by) 
-				values ('$HighestID', '$ProdID', '$DateSold', '$AmountSold', '$SoldBy')";
-				//If our query isn't successful then display a message
-				if (!mysqli_query($con,$sql))
-				{
-				 echo '<font color="red">Make sure you\'re using a valid Product ID and not duplicating a sale. <br>
-				 Tick the box above to start a new sale.</font>';
-				}
-				//If it is successful it will navigate back to the add sale page
-				//in 8 seconds.
-				else
-				{
-					 echo '<font color="green">New sale added to database successfully</font>';
-				}
+					if (isset($_POST['whichsale']))
+					{
+						$HighestID = $HighestID + 1;
+					}
+					$ProdID = $_POST['prodid'];
+					$sql1 = ("SELECT * FROM PRODUCTS
+					WHERE prod_id = '$ProdID';");
+					$result = mysqli_query($con, $sql1);
+					$row = mysqli_fetch_array($result);
+					$ProdName = $row['prod_name'];
+					$DaySold = $_POST['dsold'];
+					if ($DaySold < 10)
+					{
+						$DaySold = "0".$_POST['dsold'];
+					}
+					$MonthSold = $_POST['msold'];
+					if ($MonthSold < 10)
+					{
+						$MonthSold = "0".$_POST['msold'];
+					}
+					$YearSold = $_POST['ysold'];
+					$DateSold = $DaySold."/".$MonthSold."/".$YearSold;
+					$AmountSold = $_POST['amountsold'];
+					$SoldBy = $_POST['soldby'];
+					
+					$UpdatedStock = 
+					//Takes the user input values and adds them to our DB using an INSERT statement
+					$sql2 = "INSERT INTO SALELIST (sale_id, prod_id, date_sold, amount_sold, sold_by) 
+					values ('$HighestID', '$ProdID', '$DateSold', '$AmountSold', '$SoldBy');";
+					
+					//If our query isn't successful then display a message
+					if (!mysqli_query($con,$sql2))
+					{
+						echo '<font color="red">You\'ve already added this product ('.$ProdName.') to the sale.<br><br>
+						If this is a new sale, tick the box above.</font>';
+					}
+					//If it is successful it will navigate back to the add sale page
+					//in 8 seconds.
+					else
+					{
+						echo '<font color="green">New sale added to database successfully</font>';
+						 
+						$sql3 = "UPDATE PRODUCTS
+						SET units_in_stock = units_in_stock - '$AmountSold'
+						WHERE prod_id = '$ProdID';";
+						
+						if (!mysqli_query($con,$sql3))
+						{
+							echo 'Can\'t subtract the remaining stock, you may
+							have an incorrect stock count and be trying to subtract from 0';
+						}
+					}
+					}
+					else
+					{
+						echo "<font color=\"red\">All fields must be filled to add a new sale to the DB.</font>";
+					}
+					}
+					
+					 
+					
 				?>﻿
 				
 				<table border = "1">
 						<caption><h3>On this sale so far</h3></caption>
 							<tr>
 								<th>Sale ID</th>
-								<th>Product ID</th>
 								<th>Date of sale</th>
+								<th>Product name</th>
 								<th>Amount sold</th>
 								<th>Sold by</th>
+								<th>Stock remaining</th>
 								
 								
 							</tr>
 							<?php
 							
 							//SQL query to get all product entries from 'products' table
-							$sql = "SELECT * FROM salelist
-							WHERE sale_id = $HighestID";
+							$sql = "SELECT S.sale_id, S.date_sold, P.prod_name,
+							S.amount_sold, S.sold_by, P.units_in_stock 
+							FROM salelist S
+							RIGHT JOIN products P
+							ON S.prod_id = P.prod_id
+							WHERE S.sale_id = $HighestID";
 							//If our query isn't successful then display a message
 							if (!mysqli_query($con, $sql))
 							{
@@ -216,23 +272,16 @@
 							<?php while($row = mysqli_fetch_array($result)):?>
 							<tr>
 								<td><?php echo $row['sale_id'];?></td>
-								<td><?php echo $row['prod_id'];?></td>
 								<td><?php echo $row['date_sold'];?></td>
+								<td><?php echo $row['prod_name'];?></td>
 								<td><?php echo $row['amount_sold'];?></td>
 								<td><?php echo $row['sold_by'];?></td>
+								<td><?php echo $row['units_in_stock'];?></td>
 							</tr>
 							
 						<?php endwhile;?>    
 						</table>
-					<?php
-					}
-					else
-					{
-						echo "<font color=\"red\">All fields must be filled to add a new sale to the DB.</font>";
-					}
-					}
 					
-					?>
 					<p>
 				
 			</p>

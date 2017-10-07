@@ -4,9 +4,6 @@
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
 	<title>View reports</title>
-	<header>
-		<h1>Sales report system</h1>
-	<header/>
 	<body>
 		<nav>
 		  <ul>
