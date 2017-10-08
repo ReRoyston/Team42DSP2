@@ -92,10 +92,6 @@
 				{
 					echo 'Database Not Selected';
 				}
-				if (!mysqli_select_db ($con,'sales'))
-				{
-					echo 'Database Not Selected';
-				}
 				if (isset($_POST['producttype'])) {
 					$prodsearch = $_POST['producttype'];
 					$sql = "SELECT * FROM products 

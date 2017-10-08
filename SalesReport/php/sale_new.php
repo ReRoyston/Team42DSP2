@@ -169,7 +169,7 @@
 			//Get the sale details entered if all fields have been filled.
 			if (isset($_POST['prodid']) && isset($_POST['amountsold']) && isset($_POST['soldby'])) 
 			{
-				if ($_POST['prodid'] != "" && $_POST['amountsold'] != "" && $_POST['soldby'])
+				if ($_POST['prodid'] != "" && $_POST['amountsold'] != "" && $_POST['soldby'] != "")
 				{
 					if (isset($_POST['whichsale']))
 					{
@@ -226,7 +226,7 @@
 					}
 					else
 					{
-						echo "<font color=\"red\">All fields must be filled to add a new sale to the DB.</font>";
+						echo "<font color=\"red\">All fields must be filled to add a new sale to the Database.</font>";
 					}
 					}
 					
@@ -235,7 +235,7 @@
 				?>﻿
 				
 				<table border = "1">
-						<caption><h3>On this sale so far</h3></caption>
+						<caption><h3>On this sale if you haven't ticked new sale</h3></caption>
 							<tr>
 								<th>Sale ID</th>
 								<th>Date of sale</th>

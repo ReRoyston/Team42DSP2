@@ -139,7 +139,7 @@
 						<td><?php echo $row['prod_name'];?></td>
 						<td><?php echo $row['sold_by'];?></td>
 						<td><?php echo $row['amount_sold'];?></td>
-						<td><?php echo $row['profit'];?></td>
+						<td><?php echo '$'.$row['profit'];?></td>
 					</tr>
 				<?php endwhile;?>    
 				</table>
