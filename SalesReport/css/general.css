@@ -74,7 +74,9 @@ table {
 	border-collapse: collapse;
 }
 
-
+td.inputname {
+	text-align:right;
+}
 
 th, td {
 	text-align:center;

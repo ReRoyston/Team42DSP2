@@ -43,6 +43,13 @@
 				</div>
 			  </li>
 			  <li class="dropdown">
+				<a href="employee_new.php" class="dropbtn">Employees</a>
+				<div class="dropdown-content">
+				  <a href="employee_new.php">New employee</a>
+				  <a href="employee_remove.php">Remove employee</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
 				<a href="report_tw.php" class="dropbtn">Reports</a>
 				<div class="dropdown-content">
 				  <a href="report_tw.php">This week</a>
@@ -66,15 +73,16 @@
 				<form action="" method="post">
 				<table>
 				
-				<tr><td>Product name:</td><td class="inputfield"> <input type="text" name="prodname" size="40"></td></tr>
+				<tr><td class="inputname">Product name:</td><td class="inputfield"> <input type="text" name="prodname" size="40"></td></tr>
 				
-				<tr><td>Product type:</td><td class="inputfield">  <input type="text" name="prodtype"></td></tr>
+				<tr><td class="inputname">Product type:</td><td class="inputfield">  <input type="text" name="prodtype" onkeypress='return event.charCode >= 65 && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 47
+				 || event.charCode == 32'></td></tr>
 				
-				<tr><td>Sale price: $</td><td class="inputfield"><input type="text" name="saleprice" maxlength="6" size="3"></td></tr>
+				<tr><td class="inputname">Sale price: $</td><td class="inputfield"><input type="text" name="saleprice" maxlength="6" size="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46'></td></tr>
 				
-				<tr><td>Supplier price: $</td><td class="inputfield"><input type="text" name="supplierprice" maxlength="6" size="3"></td></tr>
+				<tr><td class="inputname">Supplier price: $</td><td class="inputfield"><input type="text" name="supplierprice" maxlength="6" size="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46'></td></tr>
 				
-				<tr><td>Current stock:</td><td class="inputfield"><input type="text" name="stockleft" maxlength="6" size="3"></td></tr>
+				<tr><td class="inputname">Current stock:</td><td class="inputfield"><input type="text" name="stockleft" maxlength="6" size="3" onkeypress='return (event.charCode >= 48 && event.charCode <= 57)'></td></tr>
 				</table>
 				<p>
 				<input type="submit" value="Add product">
@@ -190,7 +198,8 @@
 					<p>To check if a product already exists, search by 
 					<font color="1F8FFF"><b>Product type</b></font>. </p>
 					<b>Product type</b>: <input type="text" name = "producttypesearch" 
-					maxlength = "20" size ="10">
+					maxlength = "20" size ="10" onkeypress='return event.charCode >= 65 && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 47
+					|| event.charCode == 32'>
 					<p>
 					<input type="submit" value="Search">
 					</p>
@@ -229,6 +238,10 @@
 				else
 				{
 					$result = mysqli_query($con, $sql);
+					if (isset($_POST['producttypesearch']) && $_POST['producttypesearch'] != "")
+					{
+						echo 'Showing results for: '.$_POST['producttypesearch'];
+					}
 				}
 				//Fetch the array stored in $result and output it to a table
 				//using a while loop.

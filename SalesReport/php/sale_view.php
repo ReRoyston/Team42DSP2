@@ -27,6 +27,13 @@
 				</div>
 			  </li>
 			  <li class="dropdown">
+				<a href="employee_new.php" class="dropbtn">Employees</a>
+				<div class="dropdown-content">
+				  <a href="employee_new.php">New employee</a>
+				  <a href="employee_remove.php">Remove employee</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
 				<a href="report_tw.php" class="dropbtn">Reports</a>
 				<div class="dropdown-content">
 				  <a href="report_tw.php">This week</a>
@@ -48,7 +55,8 @@
 				<p>You can search a sale by entering part of all of a  
 				<u>Sale date</u>. </p>
 				<b>Sale date:</b> <input type="text" name = "saledate" 
-				maxlength = "20" size ="10">
+				maxlength = "10" size ="10" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 47'>
+				
 				<p>
 				<input type="submit" value="Search">
 				</p>
@@ -57,10 +65,6 @@
 				if (isset($_POST['saledate'])) {
 					if ($_POST['saledate'] != "") {
 						echo "Showing results for search of: '".$_POST['saledate']."'";
-					}
-					else
-					{
-						echo "Displaying first 20 rows of products".$_POST['saledate'];
 					}
 				}
 				

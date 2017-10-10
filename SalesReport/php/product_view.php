@@ -27,6 +27,13 @@
 				</div>
 			  </li>
 			  <li class="dropdown">
+				<a href="employee_new.php" class="dropbtn">Employees</a>
+				<div class="dropdown-content">
+				  <a href="employee_new.php">New employee</a>
+				  <a href="employee_remove.php">Remove employee</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
 				<a href="report_tw.php" class="dropbtn">Reports</a>
 				<div class="dropdown-content">
 				  <a href="report_tw.php">This week</a>
@@ -50,7 +57,8 @@
 				<p>You can search a product by entering a 
 				<u>Product type or name</u>. </p>
 				<b>Product type / name:</b> <input type="text" name = "producttype" 
-				maxlength = "20" size ="10">
+				 onkeypress='return event.charCode >= 65 && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 47
+				 || event.charCode == 32'>
 				<p>
 				<input type="submit" value="Search">
 				</p>

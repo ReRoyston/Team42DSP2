@@ -1,1 +1,0 @@
-https://stackoverflow.com/questions/29010176/submit-form-without-redirect-to-action-page-but-refresh-current-page

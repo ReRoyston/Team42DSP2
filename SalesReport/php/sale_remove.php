@@ -7,7 +7,7 @@
 	<body>
 		<nav>
 		  <ul>
-			  <li><a href="../html/home.html">Home</a></li>
+			  </li><li><a href="../html/home.html">Home</a></li>
 			  <li class="dropdown">
 				<a href="sale_view.php" class="dropbtn">Sales</a>
 				<div class="dropdown-content">
@@ -24,6 +24,13 @@
 				  <a href="product_new.php">New product</a>
 				  <a href="product_edit.php">Edit products</a>
 				  <a href="#">Remove products</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
+				<a href="employee_new.php" class="dropbtn">Employees</a>
+				<div class="dropdown-content">
+				  <a href="employee_new.php">New employee</a>
+				  <a href="employee_remove.php">Remove employee</a>
 				</div>
 			  </li>
 			  <li class="dropdown">

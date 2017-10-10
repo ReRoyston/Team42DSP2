@@ -46,6 +46,13 @@
 				</div>
 			  </li>
 			  <li class="dropdown">
+				<a href="employee_new.php" class="dropbtn">Employees</a>
+				<div class="dropdown-content">
+				  <a href="employee_new.php">New employee</a>
+				  <a href="employee_remove.php">Remove employee</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
 				<a href="report_tw.php" class="dropbtn">Reports</a>
 				<div class="dropdown-content">
 				  <a href="report_tw.php">This week</a>
@@ -78,12 +85,13 @@
 			?>	
 				<form action="" method="post">
 				<?php
-				echo '<p>All items will be added to the same sale unless you tick this box<br>
+				echo '<p>For a new sale for the same employee, make sure you tick
+				this box.<br>
 				<font  color="1F8FFF">New sale? <input type="checkbox" name="whichsale"></font></p>';
 				?>
 					<table>
 						<tr>
-							<td>Product Name:</td><td>
+							<td class="inputname">Product Name:</td><td>
 							<?php   
 							$select_query= "SELECT prod_id, prod_name FROM PRODUCTS ORDER BY prod_name ASC";
 							$select_query_run= mysqli_query($con, $select_query);
@@ -96,7 +104,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Date sold:</td>
+							<td class="inputname">Date sold:</td>
 							<td class="inputfield">
 								<select name="msold">
 									<?php foreach($months as $key => $month) { ?>
@@ -128,10 +136,11 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Amount sold:</td><td class="inputfield"> <input type="text" name="amountsold" maxlength="6" size="3"></td>
+							<td class="inputname">Amount sold:</td><td class="inputfield"><input type="text" name="amountsold" size="2" maxlength="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'></td>
+							</input>
 						</tr>
 						<tr>
-							<td>Sold by:</td>
+							<td class="inputname">Sold by:</td>
 							<td class="inputfield">
 								<?php   
 								$select_query= "SELECT emp_id, emp_name FROM EMPLOYEES ORDER BY emp_name ASC";
@@ -139,18 +148,14 @@
 								echo "<select name='soldby'>";
 								while($row = mysqli_fetch_array($select_query_run)){
 								
-								/* $$$$$$$$$$$$$$$$$$$$$$$$$						Write code here to pre-select the name of the previous entrant*/
-									/*if (isset($_SESSION['Sold_By']))
-									{
-										if ($row['emp_name'] = $_SESSION['Sold_By'])
+								/* $$$$$$$$$$$$$$$$$$$$$$$$$						Write code here to pre-select the name of the previous entrant
+								
+										if ($row['emp_name'] == $_SESSION['Sold_By'])
 										{
 										echo "<option value='".$row['emp_name']."' selected>".$row['emp_name']."</option>";
-										}
-										else
-										{*/
+										}*/
+									
 											echo "<option value='".$row['emp_name']."' >".$row['emp_name']."</option>";
-										//}
-									//}
 								}
 								 echo "</select>";
 								?>
@@ -171,16 +176,15 @@
 			{
 				if ($_POST['prodid'] != "" && $_POST['amountsold'] != "" && $_POST['soldby'] != "")
 				{
-					if (isset($_POST['whichsale']))
-					{
-						$HighestID = $HighestID + 1;
-					}
+					
 					$ProdID = $_POST['prodid'];
 					$sql1 = ("SELECT * FROM PRODUCTS
 					WHERE prod_id = '$ProdID';");
 					$result = mysqli_query($con, $sql1);
 					$row = mysqli_fetch_array($result);
 					$ProdName = $row['prod_name'];
+					$SoldBy = $_POST['soldby'];
+					
 					$DaySold = $_POST['dsold'];
 					if ($DaySold < 10)
 					{
@@ -192,17 +196,31 @@
 						$MonthSold = "0".$_POST['msold'];
 					}
 					$YearSold = $_POST['ysold'];
-					$DateSold = $DaySold."/".$MonthSold."/".$YearSold;
-					$AmountSold = $_POST['amountsold'];
-					$SoldBy = $_POST['soldby'];
 					
-					$UpdatedStock = 
+					$DateSold = $DaySold."/".$MonthSold."/".$YearSold;
+					$sql_prev_date = "SELECT date_sold FROM salelist
+					WHERE sale_id = $HighestID";
+					$sql_prev_seller = "SELECT sold_by FROM salelist
+					WHERE sale_id = $HighestID";
+					$DateOnThisSale = mysqli_query($con, $sql_prev_date);
+					$SellerOnCurrentSale = mysqli_query($con, $sql_prev_seller);
+					// This code checks if the user has ticked the new sale check,
+					// if they're a different person or if the date is different.
+					// if any of these conditions are met then a new sale is started.
+					if (($DateSold != $DateOnThisSale) || ($SoldBy != $SellerOnCurrentSale)
+					|| (isset($_POST['whichsale'])))
+					{
+						$HighestID++;
+					}
+					
+					$AmountSold = $_POST['amountsold']; 
+					
 					//Takes the user input values and adds them to our DB using an INSERT statement
-					$sql2 = "INSERT INTO SALELIST (sale_id, prod_id, date_sold, amount_sold, sold_by) 
+					$sql3 = "INSERT INTO SALELIST (sale_id, prod_id, date_sold, amount_sold, sold_by) 
 					values ('$HighestID', '$ProdID', '$DateSold', '$AmountSold', '$SoldBy');";
 					
 					//If our query isn't successful then display a message
-					if (!mysqli_query($con,$sql2))
+					if (!mysqli_query($con,$sql3))
 					{
 						echo '<font color="red">You\'ve already added this product ('.$ProdName.') to the sale.<br><br>
 						If this is a new sale, tick the box above.</font>';
@@ -213,11 +231,11 @@
 					{
 						echo '<font color="green">New sale added to database successfully</font>';
 						 
-						$sql3 = "UPDATE PRODUCTS
+						$sql4 = "UPDATE PRODUCTS
 						SET units_in_stock = units_in_stock - '$AmountSold'
 						WHERE prod_id = '$ProdID';";
 						
-						if (!mysqli_query($con,$sql3))
+						if (!mysqli_query($con,$sql4))
 						{
 							echo 'Can\'t subtract the remaining stock, you may
 							have an incorrect stock count and be trying to subtract from 0';

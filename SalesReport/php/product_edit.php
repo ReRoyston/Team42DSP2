@@ -27,6 +27,13 @@
 				</div>
 			  </li>
 			  <li class="dropdown">
+				<a href="employee_new.php" class="dropbtn">Employees</a>
+				<div class="dropdown-content">
+				  <a href="employee_new.php">New employee</a>
+				  <a href="employee_remove.php">Remove employee</a>
+				</div>
+			  </li>
+			  <li class="dropdown">
 				<a href="report_tw.php" class="dropbtn">Reports</a>
 				<div class="dropdown-content">
 				  <a href="report_tw.php">This week</a>
