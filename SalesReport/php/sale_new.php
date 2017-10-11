@@ -143,19 +143,25 @@
 							<td class="inputname">Sold by:</td>
 							<td class="inputfield">
 								<?php   
-								$select_query= "SELECT emp_id, emp_name FROM EMPLOYEES ORDER BY emp_name ASC";
-								$select_query_run= mysqli_query($con, $select_query);
+								
+								$sql1= "SELECT emp_id, emp_name FROM EMPLOYEES 
+								ORDER BY emp_name ASC";
+								$result1 = mysqli_query($con, $sql1);
+								
+								$sql2 = "SELECT sold_by from SALELIST ORDER BY sale_id DESC LIMIT 1";
+								$result2 = mysqli_query($con, $sql2);
+								$row2 = mysqli_fetch_array($result2);
+								
 								echo "<select name='soldby'>";
-								while($row = mysqli_fetch_array($select_query_run)){
-								
-								/* $$$$$$$$$$$$$$$$$$$$$$$$$						Write code here to pre-select the name of the previous entrant
-								
-										if ($row['emp_name'] == $_SESSION['Sold_By'])
-										{
+								while($row = mysqli_fetch_array($result1)){
+									if ($row2['sold_by'] == $row['emp_name'])
+									{
 										echo "<option value='".$row['emp_name']."' selected>".$row['emp_name']."</option>";
-										}*/
-									
-											echo "<option value='".$row['emp_name']."' >".$row['emp_name']."</option>";
+									}
+									else
+									{	
+										echo "<option value='".$row['emp_name']."' >".$row['emp_name']."</option>";
+									}
 								}
 								 echo "</select>";
 								?>
@@ -204,17 +210,17 @@
 					WHERE sale_id = $HighestID";
 					$DateOnThisSale = mysqli_query($con, $sql_prev_date);
 					$SellerOnCurrentSale = mysqli_query($con, $sql_prev_seller);
+					$DateRow = mysqli_fetch_array($DateOnThisSale);
+					$EmployeeRow = mysqli_fetch_array($SellerOnCurrentSale);
 					// This code checks if the user has ticked the new sale check,
 					// if they're a different person or if the date is different.
 					// if any of these conditions are met then a new sale is started.
-					if (($DateSold != $DateOnThisSale) || ($SoldBy != $SellerOnCurrentSale)
+					if (($DateSold != $DateRow['date_sold']) || ($SoldBy != $EmployeeRow['sold_by'])
 					|| (isset($_POST['whichsale'])))
 					{
 						$HighestID++;
 					}
-					
 					$AmountSold = $_POST['amountsold']; 
-					
 					//Takes the user input values and adds them to our DB using an INSERT statement
 					$sql3 = "INSERT INTO SALELIST (sale_id, prod_id, date_sold, amount_sold, sold_by) 
 					values ('$HighestID', '$ProdID', '$DateSold', '$AmountSold', '$SoldBy');";
@@ -229,8 +235,6 @@
 					//in 8 seconds.
 					else
 					{
-						echo '<font color="green">New sale added to database successfully</font>';
-						 
 						$sql4 = "UPDATE PRODUCTS
 						SET units_in_stock = units_in_stock - '$AmountSold'
 						WHERE prod_id = '$ProdID';";
@@ -240,16 +244,20 @@
 							echo 'Can\'t subtract the remaining stock, you may
 							have an incorrect stock count and be trying to subtract from 0';
 						}
+						else 
+						{
+						?>
+							<!--This refreshes the page so that it shows the most recent employee name in the drop list-->
+							<meta http-equiv="refresh" content="0">
+						<?php
+						}
 					}
-					}
+				}
 					else
 					{
 						echo "<font color=\"red\">All fields must be filled to add a new sale to the Database.</font>";
 					}
 					}
-					
-					 
-					
 				?>﻿
 				
 				<table border = "1">
@@ -261,8 +269,6 @@
 								<th>Amount sold</th>
 								<th>Sold by</th>
 								<th>Stock remaining</th>
-								
-								
 							</tr>
 							<?php
 							

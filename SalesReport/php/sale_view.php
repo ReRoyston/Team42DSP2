@@ -110,7 +110,7 @@
 						RIGHT JOIN products
 						ON salelist.prod_id = products.prod_id
 						WHERE salelist.sale_id IS NOT NULL AND salelist.date_sold LIKE '%$searchdate%'
-						ORDER BY salelist.date_sold, salelist.sale_id DESC;";
+						ORDER BY salelist.sale_id DESC;";
 					}
 					else {
 						$sql = "SELECT salelist.date_sold, salelist.sale_id, products.prod_id, products.prod_name,  salelist.sold_by, salelist.amount_sold, 
@@ -119,7 +119,7 @@
 						RIGHT JOIN products
 						ON salelist.prod_id = products.prod_id
 						WHERE salelist.sale_id IS NOT NULL
-						ORDER BY salelist.date_sold DESC, salelist.sale_id DESC
+						ORDER BY salelist.sale_id DESC
 						LIMIT 20;";
 					}
 					//If our query isn't successful then display a message

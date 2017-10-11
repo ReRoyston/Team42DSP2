@@ -71,11 +71,14 @@
 			<p>
 					<?php 
 					$SaleIDToEdit = $_POST['saleidtoedit'];
-					$ProductIDToEdit = $_POST['prodidtoedit'];
-					echo "You are editing the sale with a <font color='1F8FFF'>Sale ID</font> of '".$SaleIDToEdit
-					."' and a <font color='1F8FFF'>Product ID</font> of '".$ProductIDToEdit."'</font>";
+					$ProductIDToEdit = $_POST['prodidtoedit']; 
 					
-					$sql = "SELECT * FROM salelist WHERE sale_id = '$SaleIDToEdit' AND prod_id = '$ProductIDToEdit'";
+					$sql = "SELECT S.date_sold, S.sale_id, P.prod_id, 
+						P.prod_name,  S.sold_by, S.amount_sold
+						FROM salelist S
+						RIGHT JOIN products P
+						ON S.prod_id = P.prod_id
+						WHERE S.sale_id = '$SaleIDToEdit' AND S.prod_id = '$ProductIDToEdit'";
 					if (!mysqli_query($con,$sql))
 					{
 						echo "Something went wrong.";
@@ -86,16 +89,82 @@
 						$row = mysqli_fetch_array($result);
 					}
 					?>
-					
-					<!-- This form needs to be reformatted to use drop down lists on the new sale page -->
 					<form>
-						<p>Date sold: <input type="textbox" name="datesold" value="<?php echo $row['date_sold']; ?>"></p>
-						<!-- Include prod name here. need to Join SQL statement above to get it using prod id -->
-						Amount sold: <input type="textbox" name="amountsold" value="<?php echo $row['amount_sold']; ?>"
-						size="2" maxlength="5">
-						<p>Sold by: <input type="textbox" name="soldby" value="<?php echo $row['sold_by']; ?>"></p>
-						<p><input type="submit" value="Update"></p>
+						<table>
+							<!-- using this $date variable with sub string to
+							break up all the dates -->
+							<?php $date = $row['date_sold'] ?>
+							</tr>
+								<td class="inputname">Date sold:</td>
+								<td class="inputfield">
+									<select name="dsold">
+										<option value="<?php echo substr("$date",0,2);?>">
+											<?php echo substr("$date",0,2);?>
+										</option>
+									</select>
+									<select name="msold">
+										<option value="<?php echo substr("$date",3,2);?>">
+											<?php echo substr("$date",3,2);?>
+										</option>
+									</select>
+									<select name="ysold">
+										<option value="<?php echo substr("$date",6);?>">
+											<?php echo substr("$date",6);?>
+										</option>
+									</select>
+								<td>
+							</tr>
+							<tr>
+								<td class="inputname">Amount sold:</td>
+								<td class="inputfield"><input type="textbox" name="amountsold" value="<?php echo $row['amount_sold']; ?>" size="2" maxlength="5"></td>
+							</tr>
+							<tr>
+								<td class="inputname">Sold by:</td>
+								<td class="inputfield">
+									<?php   
+									$sql= "SELECT emp_id, emp_name FROM EMPLOYEES ORDER BY emp_name ASC";
+									$result= mysqli_query($con, $sql);
+									echo "<select name='soldby'>";
+									while($row2 = mysqli_fetch_array($result)){
+										if ($row['sold_by'] == $row2['emp_name'])
+										{
+											echo "<option value='".$row2['emp_name']."' selected>".$row2['emp_name']."</option>";
+										}
+										else
+										{	
+													echo "<option value='".$row2['emp_name']."' >".$row2['emp_name']."</option>";
+										}
+									}
+									 echo "</select>";
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td><p><input type="submit" value="Update"><p></td>
+							</tr>
+						</table>
 					</form>
+					<p>
+					<table border="1" align="center">
+						<caption><h3>Current sale details</h3></caption>
+						<tr>
+							<th>Date of sale</th>
+							<th>Sale ID</th>
+							<th>Product name</th>
+							<th>Sold by</th>
+							<th>Amount sold</th>
+						</tr>
+					
+						<tr>
+						<?php $date = $row['date_sold'] ?>
+							<td><?php echo $date;?></td>
+							<td><?php echo $row['sale_id'];?></td>
+							<td><?php echo $row['prod_name'];?></td>
+							<td><?php echo $row['sold_by'];?></td>
+							<td><?php echo $row['amount_sold'];?></td>
+						</tr>
+					</table>
+					</p>
 		<div/>
 	</body>
 </html>
