@@ -1,29 +1,9 @@
 <!DOCTYPE html>
-
-<?php
-	//sessions variable are global variables that are accessable over multiple
-	//pages.
-	session_start();
-	//Creates a connection to the local host (127.0.0.1) and root 
-	//which is the default username and password which defaults to nothing
-	$con = mysqli_connect('127.0.0.1','root','');
-	//If the connection isn't successful display a message
-	if(!$con)
-	{
-	 echo 'Not Connected To Server';
-	}
-	//If the connection to our sales DB isn't successful display a message
-	if (!mysqli_select_db ($con,'sales'))
-	{
-	 echo 'Database Not Selected';
-	}
-?>
-
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/general.css">
 	</head>
-	<title>Remove product</title>
+	<title>View all sales</title>
 	<body>
 		<nav>
 		  <ul>
@@ -66,33 +46,15 @@
 		</nav>
 		<div>
 			<h2>
-				Remove product
+				Edit test 2
 			</h2>
 		<section/>
 		<div class = "main">
-			<p>Select the product to remove from the list below.</p>
-				<p>
-				<form action="code_only/update_sale.php" method="post">
-					<table>
-						<tr>
-							<td class="inputname">Product Name:</td><td>
-							<?php   
-							$select_query= "SELECT prod_id, prod_name FROM PRODUCTS ORDER BY prod_name ASC";
-							$select_query_run= mysqli_query($con, $select_query);
-							echo "<select name='prodid'>";
-							while($row = mysqli_fetch_array($select_query_run)){
-							 echo "<option value='".$row['prod_id']."' >".$row['prod_name']."</option>";
-							}
-							 echo "</select>";
-							?>
-							</td>
-						</tr>
-					</table>
-					<p>
-						<input type="submit" value="REMOVE">
-					</p>
-				</form>
-				</p>
+		
+			<?php 
+				echo $_POST['saleidtoedit'];
+				echo $_POST['prodidtoedit'];
+			?>
 			
 		<div/>
 	</body>

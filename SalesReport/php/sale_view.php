@@ -82,6 +82,7 @@
 						<th>Sold by</th>
 						<th>Amount sold</th>
 						<th>Profit</th>
+						<th> </th>
 					</tr>
 					<?php
 					//Creates a connection to the local host (127.0.0.1) and root 
@@ -118,7 +119,7 @@
 						RIGHT JOIN products
 						ON salelist.prod_id = products.prod_id
 						WHERE salelist.sale_id IS NOT NULL
-						ORDER BY salelist.date_sold DESC, salelist.sale_id ASC
+						ORDER BY salelist.date_sold DESC, salelist.sale_id DESC
 						LIMIT 20;";
 					}
 					//If our query isn't successful then display a message
@@ -137,13 +138,18 @@
 					?>
 					<?php while($row = mysqli_fetch_array($result)):?>
 					<tr>
-						<td><?php echo $row['date_sold'];?></td>
-						<td><font color="1F8FFF"><b><?php echo $row['sale_id'];?></b></font></td>
-						<td><?php echo $row['prod_id'];?></td>
-						<td><?php echo $row['prod_name'];?></td>
-						<td><?php echo $row['sold_by'];?></td>
-						<td><?php echo $row['amount_sold'];?></td>
-						<td><?php echo '$'.$row['profit'];?></td>
+						<form method="POST" action="sale_edit.php">
+							<td><?php echo $row['date_sold'];?></td>
+							<td><font color="1F8FFF"><b><?php echo $row['sale_id'];?></b></font></td>
+							<td><?php echo $row['prod_id'];?></td>
+							<td><?php echo $row['prod_name'];?></td>
+							<td><?php echo $row['sold_by'];?></td>
+							<td><?php echo $row['amount_sold'];?></td>
+							<td><?php echo '$'.$row['profit'];?></td>
+							<input type="hidden" name="saleidtoedit" value="<?php echo $row['sale_id']; ?>" />
+							<input type="hidden" name="prodidtoedit" value="<?php echo $row['prod_id']; ?>" />
+							<td><input type="submit" value="Edit" /></td>
+						</form>
 					</tr>
 				<?php endwhile;?>    
 				</table>
