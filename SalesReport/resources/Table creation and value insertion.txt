@@ -38,7 +38,7 @@ VALUES('Sundown Naturals Vitamin C 300ml', 'Vitamin', '9.70', '4.60', '98');
 INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price, units_in_stock)
 VALUES('Sundown Naturals Vitamin D 300ml', 'Vitamin', '15.42', '9.80', '98');
 INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price, units_in_stock)
-VALUES('Colgate 100ml Mint', 'Toothepaste', '6.50', '4.00', '196');
+VALUES('Colgate 100ml Mint', 'Toothepaste', '6.50', '4.00', '194');
 INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price, units_in_stock)
 VALUES('Nurofen Zavance 200mg', 'Pain relief', '9.62', '4.30', '100');
 INSERT INTO PRODUCTS(prod_name, prod_type, sale_price, supplier_price, units_in_stock)

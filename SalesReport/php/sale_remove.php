@@ -24,14 +24,13 @@
 	<body>
 		<nav>
 		  <ul>
-			  <li><a href="../html/home.html">Home</a></li>
+			  <li><a href="home.php">Home</a></li>
 			  <li class="dropdown">
 				<a href="sale_view.php" class="dropbtn">Sales</a>
 				<div class="dropdown-content">
 				  <a href="sale_view.php">View sales</a>
 				  <a href="sale_new.php">New sale</a>
-				  <a href="#">Edit sales</a>
-				  <a href="#">Remove sales</a>
+				  <a href="sale_remove.php">Remove sales</a>
 				</div>
 			  </li>
 			  <li class="dropdown">
@@ -39,7 +38,6 @@
 				<div class="dropdown-content">
 				  <a href="product_view.php">View products</a>
 				  <a href="product_new.php">New product</a>
-				  <a href="product_edit.php">Edit products</a>
 				  <a href="#">Remove products</a>
 				</div>
 			  </li>
@@ -50,15 +48,7 @@
 				  <a href="employee_remove.php">Remove employee</a>
 				</div>
 			  </li>
-			  <li class="dropdown">
-				<a href="report_tw.php" class="dropbtn">Reports</a>
-				<div class="dropdown-content">
-				  <a href="report_tw.php">This week</a>
-				  <a href="#">Last week</a>
-				  <a href="#">This month</a>
-				  <a href="#">Last month</a>
-				</div>
-			  </li>
+			  <li><a href="reports.php">Reports</a></li>
 			</ul>
 		</nav>
 		<div>
@@ -140,13 +130,14 @@
 					//using a while loop.
 					?>
 					<?php while($row = mysqli_fetch_array($result)):?>
+					<?php $ProductID = $row['prod_id']; $AmountSold = $row['amount_sold']; ?>
 					<tr>
 						<td><?php echo $row['date_sold'];?></td>
 						<td><font color="1F8FFF"><b><?php echo $row['sale_id'];?></b></font></td>
-						<td><?php echo $row['prod_id'];?></td>
+						<td><?php echo $ProductID;?></td>
 						<td><?php echo $row['prod_name'];?></td>
 						<td><?php echo $row['sold_by'];?></td>
-						<td><?php echo $row['amount_sold'];?></td>
+						<td><?php echo $AmountSold;?></td>
 						<td><?php echo '$'.$row['profit'];?></td>
 					</tr>
 				<?php endwhile;?>    
@@ -173,18 +164,56 @@
 					{
 						$SaleToDelete = $_POST['saletodelete'];
 						
-						$sql = "DELETE FROM SALELIST
-						WHERE sale_id='$SaleToDelete';";
+						$sql2 = "SELECT S.prod_id, S.amount_sold, P.units_in_stock 
+						FROM SALELIST S
+						RIGHT JOIN products P
+						ON S.prod_id = P.prod_id
+						WHERE S.sale_id='$SaleToDelete';";
 						
-						if (!mysqli_query($con, $sql))
+						//If our query isn't successful then display a message
+						if (!mysqli_query($con, $sql2))
 						{
-							echo 'Unable to add remove employee from the Database.';
+							echo 'Could not retrieve sales list';
 						}
+						//If our query is succesful, save the result into a variable called
+						//$result.
 						else
 						{
-							echo '<p><font color="green">Sale number '.$SaleToDelete.' succesfully removed
-							from the database.</font></p>';
+							$result = mysqli_query($con, $sql2);
 						}
+						//Fetch the array stored in $result and output it to a table
+						//using a while loop.
+						while($row = mysqli_fetch_array($result)):
+							$StockRemaining = $row['units_in_stock'];
+							$AmountSold = $row['amount_sold'];
+							$ThisProdID = $row['prod_id'];
+							$sql3 = "UPDATE PRODUCTS SET units_in_stock = 
+							($StockRemaining + $AmountSold)
+							WHERE prod_id = $ThisProdID;";
+							if (!mysqli_query($con, $sql3))
+							{
+								echo 'Couldn\'t update stock remaining.';
+							}
+							else
+							{
+								$sql1 = "DELETE FROM SALELIST
+								WHERE sale_id='$SaleToDelete';";
+								if (!mysqli_query($con, $sql1))
+								{
+									echo 'Unable to remove sale from the Database.';
+								}
+								else
+								{
+									echo '<p><font color="green">Sale number '.$SaleToDelete.' succesfully removed
+									from the database.</font></p>
+									<p>Page will refresh in 4 seconds...</p>';
+									?>
+										<!--This refreshes the page so that it shows the most recent employee name in the drop list-->
+										<meta http-equiv="refresh" content="4">
+									<?php
+								}
+							}
+						endwhile;
 					}
 				}
 				?>

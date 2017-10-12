@@ -7,14 +7,13 @@
 	<body>
 		<nav>
 		  <ul>
-			  <li><a href="../html/home.html">Home</a></li>
+			  <li><a href="home.php">Home</a></li>
 			  <li class="dropdown">
 				<a href="sale_view.php" class="dropbtn">Sales</a>
 				<div class="dropdown-content">
 				  <a href="sale_view.php">View sales</a>
 				  <a href="sale_new.php">New sale</a>
-				  <a href="#">Edit sales</a>
-				  <a href="#">Remove sales</a>
+				  <a href="sale_remove.php">Remove sales</a>
 				</div>
 			  </li>
 			  <li class="dropdown">
@@ -22,7 +21,6 @@
 				<div class="dropdown-content">
 				  <a href="product_view.php">View products</a>
 				  <a href="product_new.php">New product</a>
-				  <a href="product_edit.php">Edit products</a>
 				  <a href="#">Remove products</a>
 				</div>
 			  </li>
@@ -33,15 +31,7 @@
 				  <a href="employee_remove.php">Remove employee</a>
 				</div>
 			  </li>
-			  <li class="dropdown">
-				<a href="report_tw.php" class="dropbtn">Reports</a>
-				<div class="dropdown-content">
-				  <a href="report_tw.php">This week</a>
-				  <a href="#">Last week</a>
-				  <a href="#">This month</a>
-				  <a href="#">Last month</a>
-				</div>
-			  </li>
+			  <li><a href="reports.php">Reports</a></li>
 			</ul>
 		</nav>
 		<div>
@@ -84,6 +74,9 @@
                     <th>Product Name</th>
                     <th>Product Type</th>
 					<th>Stock remaining</th>
+					<th>Sale price</th>
+					<th>Supplier price</th>
+					<th><font color="1F8FFF">Click to edit</font></th>
                 </tr>
 				
 				<?php
@@ -127,10 +120,16 @@
 				?>
 				<?php while($row = mysqli_fetch_array($result)):?>
 					<tr>
-						<td><font color="1F8FFF"><b><?php echo $row['prod_id'];?></b></font></td>
-						<td><?php echo $row['prod_name'];?></td>
-						<td><?php echo $row['prod_type'];?></td>
-						<td><?php echo $row['units_in_stock'];?></td>
+						<form method="POST" action="product_edit.php">
+							<td><font color="1F8FFF"><b><?php echo $row['prod_id'];?></b></font></td>
+							<td><?php echo $row['prod_name'];?></td>
+							<td><?php echo $row['prod_type'];?></td>
+							<td><?php echo $row['units_in_stock'];?></td>
+							<td><?php echo $row['sale_price'];?></td>
+							<td><?php echo $row['supplier_price'];?></td>
+							<input type="hidden" name="prodidtoedit" value="<?php echo $row['prod_id']; ?>" />
+							<td><input type="submit" value="Edit" /></td>
+						</form>
 					</tr>
 					
 				<?php endwhile;?>      
