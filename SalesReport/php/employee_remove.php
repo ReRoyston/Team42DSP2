@@ -58,8 +58,8 @@
 			<p>
 			<form action="" method="post">
 				Choose an employee to remove from the database
-				<p><font color="1F8FFF">You will not be asked to confirm whether to delete. <br>
-				It is easy to re-add an employee if they're deleted by mistake.</font></p>
+				<p><font color="1F8FFF">PLEASE NOTE: </font><You will not be asked to confirm whether to delete. <br>
+				It is easy to re-add an employee if they're deleted by mistake.</p>
 				<?php   
 				$select_query= "SELECT emp_id, emp_name FROM EMPLOYEES ORDER BY emp_name ASC";
 				$select_query_run= mysqli_query($con, $select_query);

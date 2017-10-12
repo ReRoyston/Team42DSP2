@@ -101,7 +101,8 @@
 
             if ($TimeFrame == "thismonth")
             {
-              $sql = "SELECT S.prod_id, P.prod_name, sum(S.amount_sold) AS Total_Items_Sold, sum(P.sale_price - P.supplier_price) AS Total_Profit, P.units_in_stock AS Stock_remaining
+              $sql = "SELECT S.prod_id, P.prod_name, sum(S.amount_sold) AS Total_Items_Sold, 
+			  (sum(P.sale_price - P.supplier_price) * S.amount_sold) AS Total_Profit, P.units_in_stock AS Stock_remaining
               FROM salelist S
               RIGHT JOIN products P
               ON S.prod_id = P.prod_id
@@ -150,7 +151,8 @@
 
             if ($TimeFrame == "lastmonth")
             {
-              $sql = "SELECT S.prod_id, P.prod_name, sum(S.amount_sold) AS Total_Items_Sold, sum(P.sale_price - P.supplier_price) AS Total_Profit, P.units_in_stock AS Stock_remaining
+              $sql = "SELECT S.prod_id, P.prod_name, sum(S.amount_sold) AS Total_Items_Sold, 
+			  (sum(P.sale_price - P.supplier_price) * S.amount_sold) AS Total_Profit, P.units_in_stock AS Stock_remaining
               FROM salelist S
               RIGHT JOIN products P
               ON S.prod_id = P.prod_id
